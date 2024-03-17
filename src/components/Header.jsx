@@ -1,4 +1,13 @@
+import {useState} from "react";
+
 const Header = () => {
+
+    const [homeState, setHomeState] = useState('forYou')
+
+    const handleClickHomeHeader = () => {
+        homeState === 'forYou' ? setHomeState('follow') : setHomeState('forYou')
+    }
+
     return (
         <div className="
             absolute
@@ -14,7 +23,12 @@ const Header = () => {
             p-5
             "
         >
-            <span>Đang theo dõi</span>
+            <span
+                onClick={handleClickHomeHeader}
+                className={`
+                    ${homeState === 'follow' ? 'opacity-[1]' : 'opacity-[0.5]'}
+                `}
+            >Đang theo dõi</span>
             <span className="
                 w-0.5
                 h-4
@@ -22,7 +36,12 @@ const Header = () => {
                 rounded
                 "
             ></span>
-            <span>Dành cho bạn</span>
+            <span
+                onClick={handleClickHomeHeader}
+                className={`
+                    ${homeState === 'forYou' ? 'opacity-[1]' : 'opacity-[0.5]'}
+                `}
+            >Dành cho bạn</span>
         </div>
     )
 }

@@ -5,11 +5,11 @@ export default function DetailVideo() {
             text-white
             bottom-0
             left-0
-            h-36
+            h-fit
+            max-h-36
             w-3/4
             z-[3]
             p-3
-
             flex
             flex-col
             justify-end

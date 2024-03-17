@@ -1,8 +1,33 @@
 import {FaComment, FaHeart, FaShare} from "react-icons/fa6";
 import {RxAvatar} from "react-icons/rx";
 import ActionButton from "./ActionButton.jsx";
+import {useContext} from "react";
+import {HomeContext} from "../../pages/home/Home.jsx"
 
 export default function ActionButtonContainer() {
+
+    const {isCommentOpen, setIsCommentOpen} = useContext(HomeContext)
+    const handleClickAvt = (e) => {
+        e.stopPropagation()
+        console.log('Avt')
+    }
+
+    const handleClickHeart = (e) => {
+        e.stopPropagation()
+        console.log('Heart')
+    }
+
+    const handleClickCmt = (e) => {
+        e.stopPropagation()
+        setIsCommentOpen(true)
+        console.log('Cmt')
+    }
+
+    const handleClickShare = (e) => {
+        e.stopPropagation()
+        console.log('Share')
+    }
+
     return (
         <div className="
             absolute
@@ -20,26 +45,34 @@ export default function ActionButtonContainer() {
             justify-between
             items-center
         ">
-            <ActionButton>
+            <ActionButton
+                handleClick={handleClickAvt}
+            >
                 <RxAvatar className="
                     size-10
 
                 "/>
                 +
             </ActionButton>
-            <ActionButton>
+            <ActionButton
+                handleClick={handleClickHeart}
+            >
                 <FaHeart className="
                     size-7
                 "/>
                 0
             </ActionButton>
-            <ActionButton>
+            <ActionButton id="commentBtn"
+                          handleClick={handleClickCmt}
+            >
                 <FaComment className="
                     size-7
                 "/>
                 0
             </ActionButton>
-            <ActionButton>
+            <ActionButton
+                handleClick={handleClickShare}
+            >
                 <FaShare className="
                     size-7
                 "/>
