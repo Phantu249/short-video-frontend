@@ -2,7 +2,8 @@ import {Transition} from '@headlessui/react'
 import {useContext} from "react";
 import {HomeContext} from "../../pages/home/Home.jsx";
 import Comment from "./Comment.jsx";
-import Search from "./Search.jsx";
+import CmtInput from "./CmtInput.jsx";
+import {FaXmark} from "react-icons/fa6";
 
 export default function CommentContainer(props) {
 
@@ -30,11 +31,20 @@ export default function CommentContainer(props) {
                 z-[4]
                 bg-white
                 bottom-0
-
+                rounded-t-xl
             "
             onClick={handleCommentContainerClick}
         >
             <div className="flex justify-center m-1 p-1">Comment</div>
+            <div className="
+                    absolute
+                    right-3
+                    top-3
+                    scale-125"
+                 onClick={() => setIsCommentOpen(false)}
+            >
+                <FaXmark/>
+            </div>
             <div className="
                     flex
                     relative
@@ -51,7 +61,7 @@ export default function CommentContainer(props) {
                 <Comment/>
                 <Comment/>
             </div>
-            <Search/>
+            <CmtInput/>
         </Transition>
 
     )

@@ -1,6 +1,7 @@
 import Button from "./Button.jsx";
 import {FaRegMessage, FaRegSquarePlus, FaRegUser} from "react-icons/fa6";
 import {HiOutlineHome, HiOutlineSearch} from "react-icons/hi";
+import {Link} from "react-router-dom";
 
 const NavBar = () => {
     return (
@@ -18,33 +19,43 @@ const NavBar = () => {
             "
         >
             <Button>
-                <HiOutlineHome className="
+                <Link className={'customLink'} to="/home">
+                    <HiOutlineHome className="
                                     size-6
                                     "/>
-                Trang chủ
+                    Trang chủ
+                </Link>
             </Button>
             <Button>
-                <HiOutlineSearch className="
+                <Link className={'customLink'} to="/search">
+                    <HiOutlineSearch className="
                                     size-6
                                     "/>
-                Tìm kiếm
+                    Tìm kiếm
+                </Link>
             </Button>
             <Button>
-                <FaRegSquarePlus className="
+                <Link className={'customLink'} to="/create">
+                    <FaRegSquarePlus className="
                                     size-7
                                     "/>
+                </Link>
             </Button>
             <Button>
-                <FaRegMessage className="
+                <Link className={'customLink'} to="/notification">
+                    <FaRegMessage className="
                                     size-5
                                     "/>
-                Thông báo
+                    Thông báo
+                </Link>
             </Button>
             <Button>
-                <FaRegUser className="
+                <Link className={'customLink'} to="/profile">
+                    <FaRegUser className="
                                     size-5
                                     "/>
-                Hồ sơ
+                    Hồ sơ
+                </Link>
             </Button>
         </div>
     )

@@ -1,6 +1,6 @@
 import {CiPaperplane} from "react-icons/ci";
 
-export default function Search() {
+export default function CmtInput() {
     return (
         <div className="
                 flex
@@ -22,11 +22,11 @@ export default function Search() {
                             w-[80%]
                             h-[60%]
                             rounded-3xl
-                            shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)]
+                            bg-gray-200
                             p-3
                             outline-0
                         "
-                       type="text" id="search-input" placeholder="Comment..."/>
+                       type="text" id="cmt-input" placeholder="Comment..."/>
                 <button onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -35,3 +35,4 @@ export default function Search() {
         </div>
     )
 }
+// shadow-[0_2px_5px_1px_rgba(0,0,0,0.3)]

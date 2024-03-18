@@ -21,11 +21,13 @@ const Header = () => {
             z-[10]
             gap-2
             p-5
+            drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]
             "
         >
             <span
                 onClick={handleClickHomeHeader}
                 className={`
+                    
                     ${homeState === 'follow' ? 'opacity-[1]' : 'opacity-[0.5]'}
                 `}
             >Đang theo dõi</span>
