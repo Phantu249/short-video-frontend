@@ -1,4 +1,4 @@
-export default function Button({children}) {
+export default function Button(props) {
     return (
         <button className="
                     flex
@@ -9,8 +9,11 @@ export default function Button({children}) {
                     text-xs
                     active:bg-zinc-700
                     "
+                onClick={() => {
+                    props.setPage(props.page)
+                }}
         >
-            {children}
+            {props.children}
         </button>
     )
 }

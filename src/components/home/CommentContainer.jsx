@@ -1,9 +1,9 @@
 import {Transition} from '@headlessui/react'
 import {useContext} from "react";
 import {HomeContext} from "../../pages/home/Home.jsx";
-import Comment from "./Comment.jsx";
 import CmtInput from "./CmtInput.jsx";
 import {FaXmark} from "react-icons/fa6";
+import Comment from "./Comment.jsx";
 
 export default function CommentContainer(props) {
 
@@ -11,7 +11,6 @@ export default function CommentContainer(props) {
     const handleCommentContainerClick = (e) => {
         e.stopPropagation()
     }
-
     return (
         <Transition
             show={isCommentOpen}
@@ -55,11 +54,11 @@ export default function CommentContainer(props) {
                     z-[4]
                     h-full
             ">
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
-                <Comment/>
+                {
+                    props.comments?.map((cmt, index) => (
+                        <Comment key={index} cmt={cmt.comment_text} user={cmt.user_name}/>
+                    ))
+                }
             </div>
             <CmtInput/>
         </Transition>

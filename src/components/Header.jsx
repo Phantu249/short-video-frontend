@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Header = () => {
+const Header = (props) => {
 
     const [homeState, setHomeState] = useState('forYou')
 
@@ -46,6 +46,7 @@ const Header = () => {
             >Dành cho bạn</span>
         </div>
     )
+
 }
 
 export default Header;

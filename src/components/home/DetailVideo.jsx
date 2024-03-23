@@ -1,4 +1,4 @@
-export default function DetailVideo() {
+export default function DetailVideo(props) {
     return (
         <div className="
             absolute
@@ -19,14 +19,14 @@ export default function DetailVideo() {
                 font-bold
                 text-lg
                 drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]"
-            >Son Tung MTP</p>
+            >{props.content[0]}</p>
             <p className="
                 w-full
                 max-h-26
                 text-base
                 overflow-y-auto
                 drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]"
-            >Chung ta cua tuong lai 💖
+            >{props.content[1]}
             </p>
         </div>
     )

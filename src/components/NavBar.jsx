@@ -3,7 +3,7 @@ import {FaRegMessage, FaRegSquarePlus, FaRegUser} from "react-icons/fa6";
 import {HiOutlineHome, HiOutlineSearch} from "react-icons/hi";
 import {Link} from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = (props) => {
     return (
         <div className="
             bg-black
@@ -18,7 +18,7 @@ const NavBar = () => {
             border-gray-500
             "
         >
-            <Button>
+            <Button setPage={props.setPage} page={'home'}>
                 <Link className={'customLink'} to="/home">
                     <HiOutlineHome className="
                                     size-6
@@ -26,7 +26,7 @@ const NavBar = () => {
                     Trang chủ
                 </Link>
             </Button>
-            <Button>
+            <Button setPage={props.setPage} page={'search'}>
                 <Link className={'customLink'} to="/search">
                     <HiOutlineSearch className="
                                     size-6
@@ -34,14 +34,14 @@ const NavBar = () => {
                     Tìm kiếm
                 </Link>
             </Button>
-            <Button>
+            <Button setPage={props.setPage} page={'create'}>
                 <Link className={'customLink'} to="/create">
                     <FaRegSquarePlus className="
                                     size-7
                                     "/>
                 </Link>
             </Button>
-            <Button>
+            <Button setPage={props.setPage} page={'notification'}>
                 <Link className={'customLink'} to="/notification">
                     <FaRegMessage className="
                                     size-5
@@ -49,7 +49,7 @@ const NavBar = () => {
                     Thông báo
                 </Link>
             </Button>
-            <Button>
+            <Button setPage={props.setPage} page={'profile'}>
                 <Link className={'customLink'} to="/profile">
                     <FaRegUser className="
                                     size-5

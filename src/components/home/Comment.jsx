@@ -1,4 +1,4 @@
-export default function Comment() {
+export default function Comment(props) {
     return (
         <div className="
                 flex
@@ -11,14 +11,14 @@ export default function Comment() {
             <div className="
                 w-100
                 h-fit
-                ">Sơn Tùng MTP
+                ">{props.user}
             </div>
             <div
                 className="
                 w-100
                 h-fit
                 "
-            >Cảm ơn mọi người ủng hộ bài hát của mình
+            >{props.cmt}
             </div>
         </div>
     )
