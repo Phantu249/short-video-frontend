@@ -1,8 +1,27 @@
 import ProfileButton from './ProfileButton.jsx';
-import { Link } from 'react-router-dom';
 import { IoLogOutOutline } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../App.jsx';
+import { useContext } from 'react';
+import instance from '../../instance.js';
 
 export default function UserBoard() {
+  const navigate = useNavigate();
+  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const handleLogout = async () => {
+    try {
+      const response = await instance.post('logout', {
+        refresh_token: localStorage.getItem('refresh_token'),
+      });
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      setIsAuth(false);
+      console.log('Logout success');
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div
       className='
@@ -15,9 +34,9 @@ export default function UserBoard() {
             relative
         '>
       <div className='m-2 font-bold'>Hồ sơ</div>
-      <Link to='/login' className='absolute top-2 right-2'>
+      <button className='absolute top-2 right-2' onClick={handleLogout}>
         <IoLogOutOutline className='size-7' />
-      </Link>
+      </button>
       <img
         src='/pic.png'
         alt='profile-avt'

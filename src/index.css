@@ -19,3 +19,33 @@ body * {
     height: 100%;
 
 }
+
+.message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #f8dede;
+    border-radius: 4px;
+    border-left: 5px solid #b90000;
+    color: #b90000;
+    padding: 0 5px;
+    z-index: 10;
+}
+
+.p-message-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.p-message-detail {
+    width: 85%;
+}
