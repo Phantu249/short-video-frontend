@@ -5,19 +5,21 @@ import { AuthContext } from '../../App.jsx';
 import { useContext } from 'react';
 import instance from '../../instance.js';
 
-export default function UserBoard() {
+export default function UserBoard(props) {
   const navigate = useNavigate();
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { setIsAuth } = useContext(AuthContext);
   const handleLogout = async () => {
     try {
       const response = await instance.post('logout', {
         refresh_token: localStorage.getItem('refresh_token'),
       });
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      setIsAuth(false);
-      console.log('Logout success');
-      navigate('/login');
+      if (response.status === 200) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setIsAuth(false);
+        console.log('Logout success');
+        navigate('/login');
+      }
     } catch (error) {
       console.error(error);
     }
@@ -38,21 +40,21 @@ export default function UserBoard() {
         <IoLogOutOutline className='size-7' />
       </button>
       <img
-        src='/pic.png'
+        src={props.profile.profile_pic}
         alt='profile-avt'
         className='
             w-28
             h-28
+            object-cover
             rounded-full
             border-4
             border-black
-            bg-gray-500
             my-2'
       />
-      <div>Tú Phan</div>
+      <div>{props.username}</div>
       <div className='flex w-full justify-center items-center gap-2'>
         <div className='text-center w-20'>
-          <div>249</div>
+          <div>{props.follow.following}</div>
           <div className='text-gray-400'>Following</div>
         </div>
         <span
@@ -62,7 +64,7 @@ export default function UserBoard() {
             border-gray-400
           '></span>
         <div className='text-center w-20'>
-          <div>0</div>
+          <div>{props.follow.follower}</div>
           <div className='text-gray-400'>Follower</div>
         </div>
         <span

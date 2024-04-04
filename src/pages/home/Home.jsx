@@ -1,11 +1,10 @@
 import DetailVideo from '../../components/home/DetailVideo.jsx';
 import ActionButtonContainer from '../../components/home/ActionButtonContainer.jsx';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import CommentContainer from '../../components/home/CommentContainer.jsx';
 import Header from '../../components/Header.jsx';
 import axios from 'axios';
-import { AuthContext } from '../../App.jsx';
 
 export const HomeContext = createContext();
 const Home = () => {
@@ -16,7 +15,6 @@ const Home = () => {
   const [playingVideo, setPlayingVideo] = useState(0);
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
-  const { isAuth, setIsAuth } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -27,7 +25,6 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
-    localStorage.getItem('refresh_token') ? setIsAuth(true) : setIsAuth(false);
   }, []);
 
   const handleClick = (e) => {

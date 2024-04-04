@@ -1,6 +1,6 @@
 import Video from './Video.jsx';
 
-export default function VideoList() {
+export default function VideoList(props) {
   return (
     <div
       className='
@@ -10,16 +10,11 @@ export default function VideoList() {
             flex-grow
             h-full
             overflow-y-auto
+            border-t-2
         '>
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
+      {props.videos.map((video, idx) => {
+        return <Video key={idx} video={video} />;
+      })}
     </div>
   );
 }

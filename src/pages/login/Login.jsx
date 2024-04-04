@@ -64,13 +64,17 @@ export default function Login() {
         console.log('Login failed');
       }
     } catch (error) {
-      msgs.current.show([
-        {
-          severity: 'error',
-          detail: 'Tài khoản hoặc mật khẩu không chính xác',
-          closable: true,
-        },
-      ]);
+      if (error.response?.status === 400) {
+        msgs.current.show([
+          {
+            severity: 'error',
+            detail: 'Tài khoản hoặc mật khẩu không chính xác',
+            closable: true,
+          },
+        ]);
+      } else {
+        console.error(error);
+      }
     }
   };
 

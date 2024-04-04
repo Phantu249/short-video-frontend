@@ -1,13 +1,16 @@
 import './App.css';
 import { Outlet } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 export const AuthContext = createContext();
 
 function App() {
   const [page, setPage] = useState('home');
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(!!localStorage.getItem('access_token'));
+  useEffect(() => {
+    setIsAuth(!!localStorage.getItem('access_token'));
+  }, []);
   return (
     <AuthContext.Provider value={{ isAuth, setIsAuth }}>
       <div className='h-dvh w-screen flex flex-col'>

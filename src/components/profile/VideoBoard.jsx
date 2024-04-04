@@ -3,8 +3,8 @@ import { FaRegUser } from 'react-icons/fa6';
 import { FaRegHeart } from 'react-icons/fa';
 import VideoList from './VideoList.jsx';
 
-export default function VideoBoard() {
-  const [board, setBoard] = useState('likedVideo');
+export default function VideoBoard(props) {
+  const [board, setBoard] = useState('userVideo');
 
   const handleClick = () => {
     setBoard('likedVideo' === board ? 'userVideo' : 'likedVideo');
@@ -37,7 +37,7 @@ export default function VideoBoard() {
           <FaRegHeart />
         </div>
       </div>
-      <VideoList />
+      <VideoList videos={props.videos} />
     </div>
   );
 }
