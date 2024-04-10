@@ -43,6 +43,8 @@ instanceWToken.interceptors.response.use(
         }
       } catch (err) {
         console.log(err);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         return Promise.reject(error);
       }
     }

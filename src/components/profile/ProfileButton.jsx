@@ -5,8 +5,8 @@ export default function ProfileButton(props) {
         bg-gray-200
         w-24
         h-9
-        rounded-md
-  '>
+        rounded-md'
+      onClick={props.onClick}>
       {props.children}
     </button>
   );

@@ -100,6 +100,7 @@ export default function Register() {
             name='username'
             id='username'
             value={username}
+            autoComplete='off'
             placeholder='Type your Username'
             onChange={(e) => setUsername(e.target.value)}
             className='outline-none border-b-2 h-10 pr-2 pl-8 mb-5 w-full'

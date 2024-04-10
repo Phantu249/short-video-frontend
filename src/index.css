@@ -50,3 +50,18 @@ body * {
 .p-message-detail {
     width: 85%;
 }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spin-button {
+    background: conic-gradient(
+            orangered, yellow, greenyellow, limegreen, cornflowerblue, blueviolet, violet, indianred);
+    animation: spin 4s linear infinite;
+}

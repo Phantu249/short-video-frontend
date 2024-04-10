@@ -11,6 +11,7 @@ function App() {
   useEffect(() => {
     setIsAuth(!!localStorage.getItem('access_token'));
   }, []);
+  // console.log('isAuth is', isAuth);
   return (
     <AuthContext.Provider value={{ isAuth, setIsAuth }}>
       <div className='h-dvh w-screen flex flex-col'>

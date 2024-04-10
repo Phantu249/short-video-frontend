@@ -24,6 +24,11 @@ export default function UserBoard(props) {
       console.error(error);
     }
   };
+  const handleEditProfile = (e) => {
+    e.stopPropagation();
+    props.setIsEditOpen(true);
+  };
+
   return (
     <div
       className='
@@ -35,7 +40,7 @@ export default function UserBoard(props) {
             border-b-2
             relative
         '>
-      <div className='m-2 font-bold'>Hồ sơ</div>
+      <div className='m-2 font-bold'>{props.first_name}</div>
       <button className='absolute top-2 right-2' onClick={handleLogout}>
         <IoLogOutOutline className='size-7' />
       </button>
@@ -79,8 +84,9 @@ export default function UserBoard(props) {
         </div>
       </div>
       <div className='flex w-full justify-center m-2'>
-        <ProfileButton>Sửa hồ sơ</ProfileButton>
+        <ProfileButton onClick={handleEditProfile}>Sửa hồ sơ</ProfileButton>
       </div>
+      <div className='text-center w-full h-6 mb-2 px-2 overflow-y-auto'>{props.profile.bio}</div>
     </div>
   );
 }
