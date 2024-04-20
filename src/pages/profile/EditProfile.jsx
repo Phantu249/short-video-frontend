@@ -6,7 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
 
 export default function EditProfile(props) {
-  const [editName, setEditName] = useState('');
+  const [editFName, setEditFName] = useState('');
+  const [editLName, setEditLName] = useState('');
+
   const [editBio, setEditBio] = useState('');
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
@@ -14,7 +16,8 @@ export default function EditProfile(props) {
 
   useEffect(() => {
     if (props.isEditOpen) {
-      setEditName('');
+      setEditFName('');
+      setEditLName('');
       setEditBio('');
       setFile(null);
       setFileUrl(null);
@@ -27,8 +30,11 @@ export default function EditProfile(props) {
     if (file) {
       editData.append('profile_pic', file, file.name);
     }
-    if (editName !== '') {
-      editData.append('first_name', editName);
+    if (editFName !== '') {
+      editData.append('first_name', editFName);
+    }
+    if (editLName !== '') {
+      editData.append('last_name', editLName);
     }
     if (editBio !== '') {
       editData.append('bio', editBio);
@@ -43,7 +49,6 @@ export default function EditProfile(props) {
       console.log(err);
     }
   };
-  console.log('edit');
   const handleAvatarClick = (e) => {
     e.stopPropagation();
     fileInputRef.current.click();
@@ -134,16 +139,31 @@ export default function EditProfile(props) {
         <div className='flex w-full flex-col px-3 my-5 mt-10 items-center'>
           <form className='flex w-full flex-col gap-2 mb-5'>
             <div className='flex w-full '>
-              <label htmlFor='username' className='px-2 font-bold content-center'>
+              <label htmlFor='firstname' className='px-2 font-bold content-center'>
                 Tên
               </label>
               <input
                 type='text'
-                name='username'
-                id='username'
+                name='firstname'
+                id='firstname'
                 placeholder={props.first_name}
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
+                value={editFName}
+                onChange={(e) => setEditFName(e.target.value)}
+                autoComplete='off'
+                className='outline-none border-b-2 border-[rgba(209,213,219,0)] focus:border-[rgba(209,213,219,1)] h-8 w-full text-right mx-2'
+              />
+            </div>
+            <div className='flex w-full '>
+              <label htmlFor='lastname' className='px-2 font-bold content-center'>
+                Họ
+              </label>
+              <input
+                type='text'
+                name='lastname'
+                id='lastname'
+                placeholder={props.last_name}
+                value={editLName}
+                onChange={(e) => setEditLName(e.target.value)}
                 autoComplete='off'
                 className='outline-none border-b-2 border-[rgba(209,213,219,0)] focus:border-[rgba(209,213,219,1)] h-8 w-full text-right mx-2'
               />

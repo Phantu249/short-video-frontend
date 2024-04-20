@@ -1,6 +1,23 @@
 import { LuPlusCircle } from 'react-icons/lu';
+import UploadForm from './UploadForm.jsx';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../App.jsx';
 
 export default function Create() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuth } = useContext(AuthContext);
+  useEffect(() => {
+    if (!isAuth) {
+      return navigate('/login');
+    }
+  }, []);
+
+  const handleUploadButton = (e) => {
+    e.stopPropagation();
+    setIsFormOpen(true);
+  };
   return (
     <div
       style={{
@@ -33,7 +50,11 @@ export default function Create() {
       <div className='flex w-4/5 text-center justify-center items-center'>
         Chia sẻ những khoảnh khắc đặc biệt của bạn!
       </div>
-      <button className='rounded-xl w-36 h-9 bg-blue-400 text-white z-[7]'> Upload</button>
+      <button onClick={handleUploadButton} className='rounded-xl w-36 h-9 bg-blue-400 text-white z-[7]'>
+        {' '}
+        Upload
+      </button>
+      <UploadForm isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />
     </div>
   );
 }

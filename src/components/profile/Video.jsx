@@ -1,4 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Video(props) {
+  const navigate = useNavigate();
+  const handleVideoClick = (e) => {
+    e.stopPropagation();
+    navigate(`/video/${props.video.id}`);
+  };
   return (
     <div
       className='
@@ -17,6 +24,7 @@ export default function Video(props) {
       '
         src={props.video.thumbnail}
         alt='videoAlt'
+        onClick={handleVideoClick}
       />
     </div>
   );

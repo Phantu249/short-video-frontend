@@ -7,6 +7,7 @@ import Notification from './pages/notification/Notification.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Login from './pages/login/Login.jsx';
 import Register from './pages/register/Register.jsx';
+import OneVideoPlayer from './components/OneVideoPlayer.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route path='create' element={<Create />} />
       <Route path='notification' element={<Notification />} />
       <Route path='profile' element={<Profile />} />
+      <Route path='video/:pk' element={<OneVideoPlayer />} />
     </Route>,
     <Route path='/login' element={<Login />} />,
     <Route path='/register' element={<Register />} />,

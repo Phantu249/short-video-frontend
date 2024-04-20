@@ -21,6 +21,23 @@ body * {
 
 }
 
+.globalMessage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #def8f5;
+    border-radius: 4px;
+    border-left: 5px solid #0087ae;
+    color: #00b7ed;
+    padding: 0 5px;
+    z-index: 100;
+}
+
 .message {
     display: flex;
     flex-direction: column;
@@ -35,7 +52,7 @@ body * {
     border-left: 5px solid #b90000;
     color: #b90000;
     padding: 0 5px;
-    z-index: 10;
+    z-index: 100;
 }
 
 .p-message-wrapper {

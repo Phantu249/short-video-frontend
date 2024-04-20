@@ -11,7 +11,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const msgs = useRef(null);
-
   const validateUsername = (username) => {
     const re = /^[a-zA-Z][a-zA-Z0-9]{5,14}$/;
     if (!re.test(username)) {
@@ -59,6 +58,7 @@ export default function Login() {
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('refresh_token', refresh_token);
         console.log('Login success');
+
         navigate('/home');
       } else {
         console.log('Login failed');

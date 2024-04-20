@@ -3,14 +3,14 @@ import { IoLogOutOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../App.jsx';
 import { useContext } from 'react';
-import instance from '../../instance.js';
+import { instanceWToken } from '../../instance.js';
 
 export default function UserBoard(props) {
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AuthContext);
   const handleLogout = async () => {
     try {
-      const response = await instance.post('logout', {
+      const response = await instanceWToken.post('logout', {
         refresh_token: localStorage.getItem('refresh_token'),
       });
       if (response.status === 200) {
@@ -40,7 +40,9 @@ export default function UserBoard(props) {
             border-b-2
             relative
         '>
-      <div className='m-2 font-bold'>{props.first_name}</div>
+      <div className='m-2 font-bold w-full text-center text-lg h-[32px]'>
+        {props.first_name} {props.last_name}
+      </div>
       <button className='absolute top-2 right-2' onClick={handleLogout}>
         <IoLogOutOutline className='size-7' />
       </button>

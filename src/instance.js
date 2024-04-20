@@ -1,11 +1,19 @@
 import axios from 'axios';
 
+const BASE_URL = 'http://127.0.0.1:8000/api/';
+
 const instance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: BASE_URL,
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+  },
 });
 
 export const instanceWToken = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: BASE_URL,
+  headers: {
+    'ngrok-skip-browser-warning': 'true',
+  },
 });
 instanceWToken.interceptors.request.use(
   (config) => {
@@ -42,7 +50,6 @@ instanceWToken.interceptors.response.use(
           return instanceWToken(originalRequest);
         }
       } catch (err) {
-        console.log(err);
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         return Promise.reject(error);

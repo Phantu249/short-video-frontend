@@ -13,6 +13,7 @@ export default function Profile() {
   const [videos, setVideos] = useState([]);
   const [follow, setFollow] = useState({});
   const [first_name, setFirst_name] = useState('');
+  const [last_name, setLast_name] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
   const navigate = useNavigate();
   const { isAuth } = useContext(AuthContext);
@@ -24,15 +25,19 @@ export default function Profile() {
     try {
       const res = await instanceWToken.get('profile');
       if (res.status === 200) {
-        const { profile, videos, follower, following, username, first_name } = res.data;
+        const { profile, videos, follower, following, username, first_name, last_name } = res.data;
         setUsername(username);
         setProfile(profile);
         setFollow({ follower, following });
         setVideos(videos);
         setFirst_name(first_name);
+        setLast_name(last_name);
       }
     } catch (err) {
       console.log(err);
+      if (err.response.status === 401) {
+        return navigate('/login');
+      }
     }
   }, [isEditOpen]);
   return (
@@ -49,6 +54,7 @@ export default function Profile() {
       <UserBoard
         username={username}
         first_name={first_name}
+        last_name={last_name}
         profile={profile}
         follow={follow}
         setIsEditOpen={setIsEditOpen}
@@ -57,6 +63,7 @@ export default function Profile() {
       <EditProfile
         username={username}
         first_name={first_name}
+        last_name={last_name}
         profile={profile}
         isEditOpen={isEditOpen}
         setIsEditOpen={setIsEditOpen}
