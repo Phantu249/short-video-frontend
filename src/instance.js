@@ -1,18 +1,23 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/';
+export const WS_URL = 'ws://' + '192.168.0.102:8000' + '/ws/';
+const BASE_URL = 'http://127.0.0.1:8000/api';
+const LOCAL_URL = 'http://192.168.0.102:8000/api';
+const ZROK_URL = 'https://3h97upcecq4b.share.zrok.io/api';
 
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_URL,
   headers: {
     'ngrok-skip-browser-warning': 'true',
+    'Access-Control-Allow-Origin': '*',
   },
 });
 
 export const instanceWToken = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_URL,
   headers: {
     'ngrok-skip-browser-warning': 'true',
+    'Access-Control-Allow-Origin': '*',
   },
 });
 instanceWToken.interceptors.request.use(

@@ -1,7 +1,30 @@
 import Message from '../../components/notification/Message.jsx';
 import { HiOutlineSearch } from 'react-icons/hi';
+import { useAsync } from 'react-use';
+import { instanceWToken } from '../../instance.js';
+import { useContext, useState } from 'react';
+import { AppContext } from '../../App.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Notification() {
+  const { isAuth } = useContext(AppContext);
+  const navigate = useNavigate();
+  const [datas, setDatas] = useState([]);
+  useAsync(async () => {
+    if (!isAuth) {
+      return navigate('/login');
+    }
+    try {
+      const res = await instanceWToken.get(`notification`);
+      if (res.status === 200) {
+        console.log(res.data);
+        setDatas(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <div
       className='
@@ -38,14 +61,7 @@ export default function Notification() {
             overflow-y-auto
             gap-1
       '>
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+        {datas ? datas.map((data, idx) => <Message data={data} key={idx} />) : ''}
       </div>
     </div>
   );

@@ -1,18 +1,18 @@
 import { FaComment, FaHeart, FaShare } from 'react-icons/fa6';
-import { RxAvatar } from 'react-icons/rx';
 import ActionButton from './ActionButton.jsx';
 import instance, { instanceWToken } from '../../instance.js';
 import { useContext, useState } from 'react';
-import { AuthContext, MessagesContext } from '../../App.jsx';
+import { AppContext, MessagesContext } from '../../App.jsx';
 import { useAsync } from 'react-use';
+import { useNavigate } from 'react-router-dom';
 
 export default function ActionButtonContainer(props) {
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(AppContext);
   const globalMessage = useContext(MessagesContext);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
-
+  const navigate = useNavigate();
   useAsync(async () => {
     if (!props.video) return;
     setCommentCount(props.video.comment_count);
@@ -31,7 +31,7 @@ export default function ActionButtonContainer(props) {
 
   const handleClickAvt = (e) => {
     e.stopPropagation();
-    console.log('Avt');
+    navigate(`/user/${props.video.user}`);
   };
 
   const handleClickHeart = async (e) => {
@@ -64,12 +64,18 @@ export default function ActionButtonContainer(props) {
   const handleClickCmt = (e) => {
     e.stopPropagation();
     props.setIsCommentOpen(true);
-    console.log('Cmt');
   };
 
   const handleClickShare = (e) => {
     e.stopPropagation();
-    console.log('Share');
+    navigator.clipboard
+      .writeText(window.location.origin + '/video/' + props.video.id)
+      .then(() => {
+        console.log('Link copied to clipboard');
+      })
+      .catch((err) => {
+        console.error('Could not copy text: ', err);
+      });
   };
   return (
     <div
@@ -89,23 +95,16 @@ export default function ActionButtonContainer(props) {
             items-center
         '>
       <ActionButton handleClick={handleClickAvt}>
-        <RxAvatar
-          className='
-                    size-10
-                '
-        />
-        +
+        <div className='w-10 h-10 rounded-full border-2 overflow-hidden'>
+          {props.video && <img src={props.video.profile_pic} alt='avt' className='object-cover w-10 h-10' />}
+        </div>
       </ActionButton>
       <ActionButton handleClick={handleClickHeart}>
         {isLiked ? <FaHeart className={`size-7 text-red-500`} /> : <FaHeart className={`size-7`} />}
         {likeCount}
       </ActionButton>
       <ActionButton id='commentBtn' handleClick={handleClickCmt}>
-        <FaComment
-          className='
-                    size-7
-                '
-        />
+        <FaComment className='size-7' />
         {commentCount}
       </ActionButton>
       <ActionButton handleClick={handleClickShare}>

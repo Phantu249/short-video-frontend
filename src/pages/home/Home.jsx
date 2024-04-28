@@ -3,13 +3,14 @@ import Header from '../../components/Header.jsx';
 import VideoPlayer from '../../components/VideoPlayer.jsx';
 import instance, { instanceWToken } from '../../instance.js';
 import { useAsync } from 'react-use';
-import { AuthContext } from '../../App.jsx';
+import { AppContext } from '../../App.jsx';
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, setLoading } = useContext(AppContext);
 
   useAsync(async () => {
+    setLoading(true);
     try {
       if (isAuth) {
         const response = await instanceWToken.get('/video');
@@ -25,6 +26,7 @@ const Home = () => {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   }, []);
 
   return (
@@ -36,6 +38,7 @@ const Home = () => {
             flex-grow
             flex-col
             overflow-y-hidden
+            bg-black
             z-[1]
             h-full'>
       <Header />

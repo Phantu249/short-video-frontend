@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { useContext, useRef, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
-import { MessagesContext } from '../../App.jsx';
+import { AppContext, MessagesContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function UploadForm(props) {
@@ -10,7 +10,9 @@ export default function UploadForm(props) {
   const [file, setFile] = useState(null);
   const globalMessage = useContext(MessagesContext);
   const navigate = useNavigate();
+  const { setLoading } = useContext(AppContext);
   const handleUpload = async () => {
+    setLoading(true);
     const formData = new FormData();
     if (file) {
       formData.append('video', file, file.name);
@@ -19,7 +21,7 @@ export default function UploadForm(props) {
     try {
       const res = await instanceWToken.post('video', formData);
       if (res.status === 201) {
-        console.log('Upload success');
+        setLoading(false);
         globalMessage.current.show([
           {
             severity: 'success',
@@ -32,6 +34,7 @@ export default function UploadForm(props) {
     } catch (err) {
       console.log(err);
     }
+    setLoading(false);
   };
 
   const handleFileClick = (e) => {

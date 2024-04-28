@@ -1,25 +1,31 @@
 export default function Comment(props) {
-    return (
-        <div className="
+  return (
+    <div
+      className='
                 flex
                 flex-col
                 w-100
                 h-fit
-                p-2
+                p-1
                 m-2
-        ">
-            <div className="
+        '>
+      <div
+        className='
                 w-100
                 h-fit
-                ">{props.user}
-            </div>
-            <div
-                className="
+                text-sm
+                text-gray-600
+                '>
+        {props.user}
+      </div>
+      <div
+        className='
                 w-100
                 h-fit
-                "
-            >{props.cmt}
-            </div>
-        </div>
-    )
+                text-base
+                '>
+        {props.cmt}
+      </div>
+    </div>
+  );
 }

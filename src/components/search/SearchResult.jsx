@@ -1,35 +1,20 @@
-export default function SearchResult() {
+import VideoResult from './VideoResult.jsx';
+import UserResult from './UserResult.jsx';
+
+export default function SearchResult(props) {
   return (
     <div
       className='
-                flex
-                flex-col
-                w-1/2
-                h-96
-                p-[2%]
-                rounded
-        '>
-      <img
-        src='/3.jpg'
-        alt='search_pic'
-        className='
-                     w-full
-                     h-[90%]
-                     object-cover
-                     rounded
-                     bg-gray-300
-                 '
-      />
-      <div
-        className='
-                    flex
-                    flex-grow
-                    w-full
-                    items-center
-                    pl-1
-            '>
-        hihi hahaaa
-      </div>
+        flex
+        flex-wrap
+        w-full
+        h-fit
+        overflow-y-auto
+        bg-gray-100
+        rounded-xl'>
+      {props.results.map((result, index) =>
+        props.field === 'video' ? <VideoResult key={index} video={result} /> : <UserResult key={index} user={result} />,
+      )}
     </div>
   );
 }

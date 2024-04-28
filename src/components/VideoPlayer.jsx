@@ -12,11 +12,6 @@ export default function VideoPlayer({ videos }) {
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
 
-  // useEffect(() => {
-  //   setIsPlaying(false);
-  //   setIsCommentOpen(false);
-  // }, []);
-
   const handleClick = (e) => {
     // if Cmt is opening => just close it else do the play/pause video
     if (isCommentOpen) {
@@ -102,7 +97,7 @@ export default function VideoPlayer({ videos }) {
             ${isPlaying ? 'block' : 'hidden'}`}
       />
 
-      <DetailVideo content={[videos[playingVideo]?.user_name, videos[playingVideo]?.description]} />
+      <DetailVideo content={[videos[playingVideo]?.full_name, videos[playingVideo]?.description]} />
       {videos[playingVideo] ? (
         <ActionButtonContainer
           video={videos[playingVideo]}
@@ -113,11 +108,15 @@ export default function VideoPlayer({ videos }) {
         ''
       )}
 
-      <CommentContainer
-        isCommentOpen={isCommentOpen}
-        setIsCommentOpen={setIsCommentOpen}
-        comments={videos[playingVideo]?.comments}
-      />
+      {videos[playingVideo] ? (
+        <CommentContainer
+          video={videos[playingVideo]}
+          isCommentOpen={isCommentOpen}
+          setIsCommentOpen={setIsCommentOpen}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 }

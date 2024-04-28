@@ -1,13 +1,13 @@
 import ProfileButton from './ProfileButton.jsx';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../App.jsx';
+import { AppContext } from '../../App.jsx';
 import { useContext } from 'react';
 import { instanceWToken } from '../../instance.js';
 
 export default function UserBoard(props) {
   const navigate = useNavigate();
-  const { setIsAuth } = useContext(AuthContext);
+  const { setIsAuth } = useContext(AppContext);
   const handleLogout = async () => {
     try {
       const response = await instanceWToken.post('logout', {
@@ -48,7 +48,7 @@ export default function UserBoard(props) {
       </button>
       <img
         src={props.profile.profile_pic}
-        alt='profile-avt'
+        alt='avt'
         className='
             w-28
             h-28
@@ -58,11 +58,11 @@ export default function UserBoard(props) {
             border-black
             my-2'
       />
-      <div>{props.username}</div>
+      <div>@{props.username}</div>
       <div className='flex w-full justify-center items-center gap-2'>
-        <div className='text-center w-20'>
+        <div className='text-center w-20 font-semibold'>
           <div>{props.follow.following}</div>
-          <div className='text-gray-400'>Following</div>
+          <div className='text-gray-400 font-normal'>Following</div>
         </div>
         <span
           className='
@@ -70,9 +70,9 @@ export default function UserBoard(props) {
             border-l-2
             border-gray-400
           '></span>
-        <div className='text-center w-20'>
+        <div className='text-center w-20 font-semibold'>
           <div>{props.follow.follower}</div>
-          <div className='text-gray-400'>Follower</div>
+          <div className='text-gray-400 font-normal'>Follower</div>
         </div>
         <span
           className='
@@ -80,9 +80,9 @@ export default function UserBoard(props) {
             border-l-2
             border-gray-400
           '></span>
-        <div className='text-center w-20'>
-          <div>3</div>
-          <div className='text-gray-400'>Like</div>
+        <div className='text-center w-20 font-semibold'>
+          <div>{props.likeCount}</div>
+          <div className='text-gray-400 font-normal'>Like</div>
         </div>
       </div>
       <div className='flex w-full justify-center m-2'>

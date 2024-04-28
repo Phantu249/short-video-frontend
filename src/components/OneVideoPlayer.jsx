@@ -87,14 +87,13 @@ export default function OneVideoPlayer() {
             drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]
             ${isPlaying ? 'block' : 'hidden'}`}
       />
-
-      <DetailVideo content={[playingVideo?.user_name, playingVideo?.description]} />
-      <ActionButtonContainer isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
-      <CommentContainer
-        isCommentOpen={isCommentOpen}
-        setIsCommentOpen={setIsCommentOpen}
-        comments={playingVideo?.comments}
-      />
+      {playingVideo && <DetailVideo content={[playingVideo?.full_name, playingVideo?.description]} />}
+      {playingVideo && (
+        <ActionButtonContainer video={playingVideo} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
+      )}
+      {playingVideo && (
+        <CommentContainer video={playingVideo} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
+      )}
     </div>
   );
 }

@@ -2,12 +2,14 @@ import ProfileButton from '../../components/profile/ProfileButton.jsx';
 import { IoCameraOutline } from 'react-icons/io5';
 import { Transition } from '@headlessui/react';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
+import { AppContext } from '../../App.jsx';
 
 export default function EditProfile(props) {
   const [editFName, setEditFName] = useState('');
   const [editLName, setEditLName] = useState('');
+  const { setLoading } = useContext(AppContext);
 
   const [editBio, setEditBio] = useState('');
   const [file, setFile] = useState(null);
@@ -25,6 +27,7 @@ export default function EditProfile(props) {
   }, [props.isEditOpen]);
 
   const handleSaveProfileClick = async (e) => {
+    setLoading(true);
     e.stopPropagation();
     const editData = new FormData();
     if (file) {
@@ -41,13 +44,15 @@ export default function EditProfile(props) {
     }
 
     try {
-      const res = await instanceWToken.post('profile', editData);
+      const res = await instanceWToken.put('profile', editData);
       if (res.status === 200) {
+        setLoading(false);
         props.setIsEditOpen(false);
       }
     } catch (err) {
       console.log(err);
     }
+    setLoading(false);
   };
   const handleAvatarClick = (e) => {
     e.stopPropagation();

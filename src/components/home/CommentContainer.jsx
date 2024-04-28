@@ -2,8 +2,25 @@ import { Transition } from '@headlessui/react';
 import CmtInput from './CmtInput.jsx';
 import { FaXmark } from 'react-icons/fa6';
 import Comment from './Comment.jsx';
+import { useState } from 'react';
+import { useAsync } from 'react-use';
+import instance from '../../instance.js';
 
 export default function CommentContainer(props) {
+  const [comments, setComments] = useState([]);
+
+  useAsync(async () => {
+    if (!props.isCommentOpen) return;
+    try {
+      const response = await instance.get(`/comment/${props.video.id}`);
+      if (response.status === 200) {
+        setComments(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [props.isCommentOpen, props.video]);
+
   const handleCommentContainerClick = (e) => {
     e.stopPropagation();
   };
@@ -49,11 +66,11 @@ export default function CommentContainer(props) {
                     z-[4]
                     h-full
             '>
-        {props.comments?.map((cmt, index) => (
-          <Comment key={index} cmt={cmt.comment_text} user={cmt.user_name} />
+        {comments?.map((cmt, index) => (
+          <Comment key={index} cmt={cmt.comment_text} user={cmt.fullname} />
         ))}
       </div>
-      <CmtInput />
+      <CmtInput video={props.video} setComments={setComments} />
     </Transition>
   );
 }

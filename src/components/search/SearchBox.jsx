@@ -6,6 +6,7 @@ export default function SearchBox(props) {
       className='
             flex
             w-full
+            flex-none
             h-16
             justify-centerS
             items-center'>
@@ -14,6 +15,7 @@ export default function SearchBox(props) {
             h-full
             w-full
             flex
+            flex-none
             justify-center
             items-center'>
         <div
@@ -27,7 +29,7 @@ export default function SearchBox(props) {
           <input
             className='
                 w-[100%]
-                h-[65%]
+                h-[60%]
                 rounded-xl
                 bg-gray-200
                 p-3

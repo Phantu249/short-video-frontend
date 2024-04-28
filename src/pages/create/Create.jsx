@@ -2,12 +2,12 @@ import { LuPlusCircle } from 'react-icons/lu';
 import UploadForm from './UploadForm.jsx';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../App.jsx';
+import { AppContext } from '../../App.jsx';
 
 export default function Create() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const navigate = useNavigate();
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth } = useContext(AppContext);
   useEffect(() => {
     if (!isAuth) {
       return navigate('/login');

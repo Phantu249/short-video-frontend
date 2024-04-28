@@ -2,10 +2,26 @@ import { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa6';
 import { FaRegHeart } from 'react-icons/fa';
 import VideoList from './VideoList.jsx';
+import { useAsync } from 'react-use';
+import instance from '../../instance.js';
 
 export default function VideoBoard(props) {
   const [board, setBoard] = useState('userVideo');
+  const [videos, setVideos] = useState([]);
+  const [deleteVideo, setDeleteVideo] = useState(false);
 
+  useAsync(async () => {
+    try {
+      const res = await instance.get(
+        `videoprofile?user_id=${encodeURIComponent(props.user_id)}&type=${encodeURIComponent(board)}`,
+      );
+      if (res.status === 200) {
+        setVideos(res.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [board]);
   const handleClick = () => {
     setBoard('likedVideo' === board ? 'userVideo' : 'likedVideo');
   };
@@ -37,7 +53,7 @@ export default function VideoBoard(props) {
           <FaRegHeart />
         </div>
       </div>
-      <VideoList videos={props.videos} />
+      <VideoList videos={videos} setVideos={setVideos} board={board} />
     </div>
   );
 }
