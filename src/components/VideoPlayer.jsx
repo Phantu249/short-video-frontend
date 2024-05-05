@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import Hls from 'hls.js';
 
-export default function VideoPlayer({ setReload, videos, homeState }) {
+export default function VideoPlayer({ loadMore, videos, homeState }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const videoRef = useRef(null);
@@ -24,12 +24,13 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
       hls.loadSource(videoSrc);
       hls.attachMedia(videoRef.current);
     }
+    setIsPlaying(!videoRef.current.paused);
   }, [playingVideo]);
 
   const handleClick = (e) => {
     // if Cmt is opening => just close it else do the play/pause video
     if (isCommentOpen) {
-      setIsCommentOpen(false);
+      return setIsCommentOpen(false);
     } else {
       videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
     }
@@ -37,11 +38,13 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
   };
 
   const handleMouseStart = (e) => {
+    if (isCommentOpen) return;
     setPosition([e.clientX, e.clientY]);
     setMouseDown(true);
   };
 
   const handleMouseMove = (e) => {
+    if (isCommentOpen) return;
     if (!mouseDown) return;
     if (e.target.id === 'home-container' || e.target.id === 'video-player') {
       const curPosition = [e.clientX, e.clientY];
@@ -54,10 +57,13 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
     }
   };
   const handleTouchStart = (e) => {
+    if (isCommentOpen) return;
     setPosition([e.touches[0].clientX, e.touches[0].clientY]);
   };
 
   const handleTouchMove = (e) => {
+    if (isCommentOpen) return;
+
     if (e.target.id === 'home-container' || e.target.id === 'video-player') {
       const curPosition = [e.touches[0].clientX, e.touches[0].clientY];
 
@@ -71,7 +77,9 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
   };
 
   const handleMove = (e) => {
+    if (isCommentOpen) return;
     setMouseDown(false);
+
     if (direction === 'down') {
       setPlayingVideo((cur) => (cur - 1 + videos.length) % videos.length);
     }
@@ -79,9 +87,9 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
       setPlayingVideo((cur) => (cur + 1) % videos.length);
     }
     setDirection('');
-    setIsPlaying(false);
+    // setIsPlaying(false);
     if (videos.length === playingVideo + 2) {
-      setReload(1);
+      loadMore();
     }
   };
 
@@ -107,9 +115,9 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
       setPlayingVideo((cur) => (cur - 1 + videos.length) % videos.length);
     }
     if (videos.length === playingVideo + 2) {
-      setReload(1);
+      loadMore();
     }
-    setIsPlaying(false);
+    // setIsPlaying(false);
   };
 
   return (
@@ -127,6 +135,7 @@ export default function VideoPlayer({ setReload, videos, homeState }) {
             z-[1]
             bg-black
             h-full
+            
         '
       // style={{ display: display ? 'flex' : 'none' }}
       onClick={handleClick}

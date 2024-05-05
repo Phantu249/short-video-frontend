@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 
+body {
+    overscroll-behavior: contain;
+}
+
 body * {
     font-family: "Noto Sans", sans-serif;
     font-optical-sizing: auto;

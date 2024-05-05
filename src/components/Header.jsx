@@ -21,8 +21,8 @@ const Header = (props) => {
           props.setHomeState('follow');
         }}
         className={`
-                    
-                    ${props.homeState === 'follow' ? 'opacity-[1]' : 'opacity-[0.5]'}
+                    font-semibold
+                    ${props.homeState === 'follow' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Đang theo dõi
       </span>
@@ -38,8 +38,8 @@ const Header = (props) => {
           e.stopPropagation();
           props.setHomeState('forYou');
         }}
-        className={`
-                    ${props.homeState === 'forYou' ? 'opacity-[1]' : 'opacity-[0.5]'}
+        className={` font-semibold
+                    ${props.homeState === 'forYou' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Dành cho bạn
       </span>
