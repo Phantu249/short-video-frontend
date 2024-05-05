@@ -12,6 +12,7 @@ export default function UploadForm(props) {
   const navigate = useNavigate();
   const { setLoading } = useContext(AppContext);
   const handleUpload = async () => {
+    if (!file) return;
     setLoading(true);
     const formData = new FormData();
     if (file) {
@@ -19,7 +20,7 @@ export default function UploadForm(props) {
     }
     formData.append('description', description);
     try {
-      const res = await instanceWToken.post('video', formData);
+      const res = await instanceWToken.post('videoupload', formData);
       if (res.status === 201) {
         setLoading(false);
         globalMessage.current.show([

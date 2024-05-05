@@ -1,16 +1,30 @@
 import DetailVideo from './home/DetailVideo.jsx';
 import ActionButtonContainer from './home/ActionButtonContainer.jsx';
 import CommentContainer from './home/CommentContainer.jsx';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
+import Hls from 'hls.js';
 
-export default function VideoPlayer({ videos }) {
+export default function VideoPlayer({ setReload, videos, homeState }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const videoRef = useRef(null);
   const [playingVideo, setPlayingVideo] = useState(0);
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
+  const [mouseDown, setMouseDown] = useState(false);
+  useEffect(() => {
+    setPlayingVideo(0);
+  }, [homeState]);
+
+  useEffect(() => {
+    const videoSrc = videos[playingVideo].video_path;
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(videoRef.current);
+    }
+  }, [playingVideo]);
 
   const handleClick = (e) => {
     // if Cmt is opening => just close it else do the play/pause video
@@ -22,6 +36,23 @@ export default function VideoPlayer({ videos }) {
     setIsPlaying(videoRef.current.paused);
   };
 
+  const handleMouseStart = (e) => {
+    setPosition([e.clientX, e.clientY]);
+    setMouseDown(true);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!mouseDown) return;
+    if (e.target.id === 'home-container' || e.target.id === 'video-player') {
+      const curPosition = [e.clientX, e.clientY];
+      if (curPosition[1] - position[1] > 20) {
+        setDirection('down');
+      }
+      if (curPosition[1] - position[1] < -20) {
+        setDirection('top');
+      }
+    }
+  };
   const handleTouchStart = (e) => {
     setPosition([e.touches[0].clientX, e.touches[0].clientY]);
   };
@@ -30,16 +61,17 @@ export default function VideoPlayer({ videos }) {
     if (e.target.id === 'home-container' || e.target.id === 'video-player') {
       const curPosition = [e.touches[0].clientX, e.touches[0].clientY];
 
-      if (curPosition[1] - position[1] > 0) {
+      if (curPosition[1] - position[1] > 20) {
         setDirection('down');
       }
-      if (curPosition[1] - position[1] < 0) {
+      if (curPosition[1] - position[1] < -20) {
         setDirection('top');
       }
     }
   };
 
-  const handleTouchEnd = (e) => {
+  const handleMove = (e) => {
+    setMouseDown(false);
     if (direction === 'down') {
       setPlayingVideo((cur) => (cur - 1 + videos.length) % videos.length);
     }
@@ -48,7 +80,38 @@ export default function VideoPlayer({ videos }) {
     }
     setDirection('');
     setIsPlaying(false);
+    if (videos.length === playingVideo + 2) {
+      setReload(1);
+    }
   };
+
+  useEffect(() => {
+    if (!isCommentOpen) {
+      document.addEventListener('keydown', handelKeyDown);
+    }
+    if (isCommentOpen) {
+      return () => {
+        document.removeEventListener('keydown', handelKeyDown);
+      };
+    }
+    return () => {
+      document.removeEventListener('keydown', handelKeyDown);
+    };
+  }, [isCommentOpen]);
+
+  const handelKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      setPlayingVideo((cur) => (cur + 1) % videos.length);
+    }
+    if (e.key === 'ArrowDown') {
+      setPlayingVideo((cur) => (cur - 1 + videos.length) % videos.length);
+    }
+    if (videos.length === playingVideo + 2) {
+      setReload(1);
+    }
+    setIsPlaying(false);
+  };
+
   return (
     <div
       className='
@@ -67,14 +130,16 @@ export default function VideoPlayer({ videos }) {
         '
       // style={{ display: display ? 'flex' : 'none' }}
       onClick={handleClick}
+      onMouseDown={handleMouseStart}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMove}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onTouchEnd={handleMove}
       id='home-container'>
       <video
         loop
         autoPlay
-        src={videos[playingVideo]?.video_path}
         className='
             max-w-full
             max-h-full
@@ -82,6 +147,7 @@ export default function VideoPlayer({ videos }) {
           '
         id='video-player'
         ref={videoRef}>
+        preLoad='metadata'
         {/*if u want add autoPlay u need set isPlaying init to true*/}
         {/*but remember autoPlay is blocked by browser*/}
       </video>

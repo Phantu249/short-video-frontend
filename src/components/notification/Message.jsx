@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../App.jsx';
+import { useContext } from 'react';
 
 export default function Message(props) {
   const navigate = useNavigate();
+  const { userId } = useContext(AppContext);
 
   function formatTimeAgo(timestamp) {
     const time = new Date(timestamp);
@@ -56,15 +59,27 @@ export default function Message(props) {
             border-gray-300
             ml-2'
       />
-      <div className='flex flex-col w-full gap-1 p-2'>
+      <div className='flex flex-col justify-center w-full gap-1 p-2'>
         <div
           className='
                 flex
+                h-7
+                items-start
+                overflow-hidden
+                pt-1
                 place-content-between'>
-          <span className='font-bold'>{props.data.user.first_name}</span>
-          <span className='text-sm'>{formatTimeAgo(props.data.timestamp)}</span>
+          <span className='font-bold text-start'>
+            {props.data.user.first_name} {props.data.user.last_name}
+          </span>
+          <span className='text-sm min-w-24'>{formatTimeAgo(props.data.timestamp)}</span>
         </div>
-        <div className='text-sm w-full h-10 overflow-hidden'>{props.data.msg}</div>
+        {props.data.sender_id === userId ? (
+          <div className='text-sm w-full h-10 overflow-hidden text-gray-500'>{props.data.msg}</div>
+        ) : props.data.is_read ? (
+          <div className='text-sm w-full h-10 overflow-hidden text-gray-500'>{props.data.msg}</div>
+        ) : (
+          <div className='text-sm w-full h-10 overflow-hidden text-black font-semibold '>{props.data.msg}</div>
+        )}
       </div>
     </div>
   );

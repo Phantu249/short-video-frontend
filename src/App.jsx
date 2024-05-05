@@ -17,17 +17,26 @@ function App() {
   const [userId, setUserId] = useState(null);
   const globalMessage = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [hasNotif, setHasNotif] = useState(false);
+  const [socketUrl, setSocketUrl] = useState(null);
 
   useEffect(() => {
-    setIsAuth(!!localStorage.getItem('access_token'));
-    if (!isAuth) {
+    if (!localStorage.getItem('access_token')) {
       return;
     }
-    const payload = jwtDecode(localStorage.getItem('access_token'));
-    setUserId(payload.user_id);
-  }, []);
+    try {
+      const payload = jwtDecode(localStorage.getItem('access_token'));
+      setUserId(payload.user_id);
+      setSocketUrl(`${WS_URL}notification/${payload.user_id}`);
+      setIsAuth(!!localStorage.getItem('access_token'));
+    } catch (error) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      console.log(error);
+    }
+  }, [localStorage.getItem('access_token')]);
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`${WS_URL}notification/${userId}`, {
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: (closeEvent) => true,
     retryOnError: true,
   });
@@ -39,9 +48,12 @@ function App() {
   useEffect(() => {
     console.log('lastJsonMessage', lastJsonMessage);
     if (lastJsonMessage !== null) {
-      console.log('lastJsonMessage', lastJsonMessage.message);
+      if (lastJsonMessage.action === 'message') {
+        return setHasNotif(true);
+      }
       globalMessage.current.show([
         {
+          severity: 'info',
           detail: lastJsonMessage.message,
           closable: true,
         },
@@ -50,7 +62,7 @@ function App() {
   }, [lastJsonMessage]);
 
   return (
-    <AppContext.Provider value={{ isAuth, setIsAuth, setLoading, userId }}>
+    <AppContext.Provider value={{ isAuth, setIsAuth, setLoading, userId, hasNotif, setHasNotif }}>
       <div className='flex justify-center items-center'>
         <Messages ref={globalMessage} className='globalMessage' />
       </div>

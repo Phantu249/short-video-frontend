@@ -10,6 +10,7 @@ import Register from './pages/register/Register.jsx';
 import OneVideoPlayer from './components/OneVideoPlayer.jsx';
 import UserProfile from './pages/userprofile/UserProfile.jsx';
 import Chat from './pages/chat/Chat.jsx';
+import Test from './pages/Test.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
     </Route>,
     <Route path='/login' element={<Login />} />,
     <Route path='/register' element={<Register />} />,
+    <Route path='/test' element={<Test />} />,
   ]),
 );
 

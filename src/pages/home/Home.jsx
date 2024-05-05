@@ -4,31 +4,118 @@ import VideoPlayer from '../../components/VideoPlayer.jsx';
 import instance, { instanceWToken } from '../../instance.js';
 import { useAsync } from 'react-use';
 import { AppContext } from '../../App.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
+  const [homeState, setHomeState] = useState('forYou');
   const { isAuth, setLoading } = useContext(AppContext);
+  const navigate = useNavigate();
+  const [watched, setWatched] = useState([]);
+  const [reload, setReload] = useState(0);
 
   useAsync(async () => {
     setLoading(true);
+    setVideos([]);
+    setWatched([]);
+    const data = {
+      type: homeState,
+      watched: [],
+    };
     try {
       if (isAuth) {
-        const response = await instanceWToken.get('/video');
+        const response = await instanceWToken.post(`videorecommend`, data);
         if (response.status === 200) {
           setVideos(response.data);
+          const arr = response.data.map((video) => video.id);
+          setWatched(arr);
         }
       } else {
-        const response = await instance.get('/video');
+        const response = await instance.post(`videorecommend`, data);
         if (response.status === 200) {
           setVideos(response.data);
+          const arr = response.data.map((video) => video.id);
+          setWatched(arr);
         }
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      if (error.response.status === 401) {
+        return navigate('/login');
+      }
     }
     setLoading(false);
-  }, []);
+  }, [homeState]);
 
+  useAsync(async () => {
+    if (videos.length === 0) return;
+    if (reload === 0 || reload !== 1) return;
+    setLoading(true);
+    const data = {
+      type: homeState,
+      watched,
+    };
+    try {
+      if (isAuth) {
+        const response = await instanceWToken.post(`videorecommend`, data);
+        if (response.status === 200) {
+          console.log(response.data);
+          setVideos((prev) => [...prev, ...response.data]);
+          const arr = response.data.map((video) => video.id);
+          setWatched((prev) => [...prev, ...arr]);
+          // response.data.forEach((video) => {
+          //   setWatched((prev) => [...prev, video.id]);
+          // });
+        }
+      } else {
+        const response = await instance.post(`videorecommend`, data);
+        if (response.status === 200) {
+          console.log(response.data);
+          setVideos((prev) => [...prev, ...response.data]);
+          const arr = response.data.map((video) => video.id);
+          setWatched((prev) => [...prev, ...arr]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setReload(false);
+      setLoading(false);
+
+      if (error.response.status === 401) {
+        return navigate('/login');
+      }
+    }
+    setLoading(false);
+    setReload(2);
+  }, [reload]);
+
+  // useAsync(async () => {
+  //   setLoading(true);
+  //   try {
+  //     if (isAuth) {
+  //       const response = await instanceWToken.get(`/video?type=${encodeURIComponent(homeState)}`);
+  //       if (response.status === 200) {
+  //         console.log(response.data);
+  //         setVideos(response.data);
+  //         response.data.forEach((video) => {
+  //           setWatched((prev) => [...prev, video.id]);
+  //         });
+  //       }
+  //     } else {
+  //       const response = await instance.get(`/video?type=${encodeURIComponent(homeState)}`);
+  //       if (response.status === 200) {
+  //         setVideos(response.data);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     if (error.response.status === 401) {
+  //       return navigate('/login');
+  //     }
+  //   }
+  //   setLoading(false);
+  // }, [homeState]);
   return (
     <div
       className='
@@ -41,8 +128,8 @@ const Home = () => {
             bg-black
             z-[1]
             h-full'>
-      <Header />
-      {videos.length > 0 ? <VideoPlayer videos={videos} /> : ''}
+      <Header homeState={homeState} setHomeState={setHomeState} />
+      {videos.length > 0 ? <VideoPlayer setReload={setReload} videos={videos} homeState={homeState} /> : ''}
     </div>
   );
 };

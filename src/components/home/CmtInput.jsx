@@ -8,7 +8,7 @@ export default function CmtInput(props) {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (commentContent === '' || !commentContent.trim()) return;
+    if (commentContent === '' || commentContent.trim() === '') return;
     const data = {
       comment_text: commentContent,
       video_id: props.video.id,

@@ -5,11 +5,33 @@ import { instanceWToken } from '../../instance.js';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
+import ChatSearch from './ChatSearch.jsx';
 
 export default function Notification() {
   const { isAuth } = useContext(AppContext);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
+  const { hasNotif, setHasNotif } = useContext(AppContext);
+  const [isChatSearchOpen, setIsChatSearchOpen] = useState(false);
+
+  useAsync(async () => {
+    if (hasNotif) {
+      if (!isAuth) {
+        return navigate('/login');
+      }
+      try {
+        const res = await instanceWToken.get(`notification`);
+        if (res.status === 200) {
+          console.log(res.data);
+          setDatas(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      setHasNotif(false);
+    }
+  }, [hasNotif]);
+
   useAsync(async () => {
     if (!isAuth) {
       return navigate('/login');
@@ -50,8 +72,15 @@ export default function Notification() {
             flex-none
             '>
         Thông báo
-        <HiOutlineSearch className='absolute right-2 top-2 size-6' />
+        <HiOutlineSearch
+          className='absolute right-2 top-2 size-6'
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsChatSearchOpen(true);
+          }}
+        />
       </div>
+      <ChatSearch isChatSearchOpen={isChatSearchOpen} setIsChatSearchOpen={setIsChatSearchOpen} />
       <div
         className='
             flex

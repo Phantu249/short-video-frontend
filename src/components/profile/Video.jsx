@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { MdDeleteForever } from 'react-icons/md';
 import { instanceWToken } from '../../instance.js';
 import { MessagesContext } from '../../App.jsx';
 import { useContext } from 'react';
+import { confirmDialog } from 'primereact/confirmdialog';
+import { TiDelete } from 'react-icons/ti';
 
 export default function Video(props) {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ export default function Video(props) {
     navigate(`/video/${props.video.id}`);
   };
 
-  const handleDelVideoClick = async (e) => {
-    e.stopPropagation();
+  const accept = async () => {
+    console.log('accept');
     try {
       const response = await instanceWToken.delete(`video/${encodeURIComponent(props.video.id)}`);
       if (response.status === 200) {
@@ -30,6 +31,38 @@ export default function Video(props) {
       console.error(error);
     }
   };
+
+  const reject = () => {};
+
+  const showConfirm = (e) => {
+    confirmDialog({
+      message: 'Bạn có muốn xóa video này?',
+      header: 'Xác nhận xóa!',
+      defaultFocus: 'reject',
+      acceptClassName: 'p-button-danger',
+      accept,
+      reject,
+    });
+  };
+
+  // const handleDelVideoClick = async (e) => {
+  //   e.stopPropagation();
+  //   try {
+  //     const response = await instanceWToken.delete(`video/${encodeURIComponent(props.video.id)}`);
+  //     if (response.status === 200) {
+  //       props.handleDel(props.video.id);
+  //       globalMessage.current.show([
+  //         {
+  //           severity: 'success',
+  //           detail: 'Delete success',
+  //           closable: true,
+  //         },
+  //       ]);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <div
       className='
@@ -41,9 +74,9 @@ export default function Video(props) {
             p-[1px]
     '>
       {props.board === 'userVideo' && (
-        <MdDeleteForever
-          onClick={handleDelVideoClick}
-          className='absolute bottom-1 right-1 z-[10] size-7 text-gray-500 '
+        <TiDelete
+          onClick={showConfirm}
+          className='absolute bottom-1 right-1 z-[10] size-7 drop-shadow-[0_1px_0px_rgba(200,200,200,0.8)] text-gray-600 cursor-pointer'
         />
       )}
       <img

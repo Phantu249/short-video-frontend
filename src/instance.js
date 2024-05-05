@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const WS_URL = 'ws://' + '192.168.0.102:8000' + '/ws/';
+export const WS_URL = 'ws://' + '192.168.0.107:8000' + '/ws/';
 const BASE_URL = 'http://127.0.0.1:8000/api';
-const LOCAL_URL = 'http://192.168.0.102:8000/api';
-const ZROK_URL = 'https://3h97upcecq4b.share.zrok.io/api';
+const LOCAL_URL = 'http://192.168.0.107:8000/api';
+const ZROK_URL = 'https://l90q1pe5amuw.share.zrok.io/api';
 
 const instance = axios.create({
   baseURL: LOCAL_URL,
@@ -41,7 +41,15 @@ instanceWToken.interceptors.response.use(
       return Promise.reject(error);
     }
     const originalRequest = error.config;
+
+    if (originalRequest._retry) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      return Promise.reject(error);
+    }
+
     if (error.response.status === 401 || error.response.status === 403) {
+      originalRequest._retry = true;
       try {
         const response = await instance.post('token/refresh', {
           headers: {

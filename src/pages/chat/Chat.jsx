@@ -58,19 +58,32 @@ export default function Chat() {
 
   useEffect(() => {
     if (lastJsonMessage !== null) {
+      if (lastJsonMessage.sender === receiverId) {
+        sendJsonMessage({
+          action: 'get_messages',
+          sender_id: receiverId,
+          receiver_id: userId,
+        });
+      }
       setMessages((prev) => [...prev, lastJsonMessage]);
     }
   }, [lastJsonMessage]);
   const handleSendMessage = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (messageContent === '' || !messageContent.trim()) return;
+    if (messageContent === '' || messageContent.trim() === '') return;
     const data = {
+      action: 'send_message',
       message: messageContent,
     };
     sendJsonMessage(data);
     setMessageContent('');
   };
+
+  const handleUserClick = () => {
+    navigate(`/user/${receiverId}`);
+  };
+
   return (
     <div
       className='
@@ -84,6 +97,7 @@ export default function Chat() {
             z-[1]
             h-full'>
       <div
+        onClick={handleUserClick}
         className='
             w-full
             h-12

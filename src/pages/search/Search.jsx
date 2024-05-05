@@ -22,7 +22,7 @@ export default function Search() {
 
   useAsync(async () => {
     setSearchResult([]);
-    if (searchContent === '') return;
+    if (searchContent === '' || searchContent.trim() === '') return;
     setLoading(true);
     try {
       const res = await instance(
@@ -49,7 +49,7 @@ export default function Search() {
   }, [searchField]);
 
   const search = async () => {
-    if (searchContent === '') return;
+    if (searchContent === '' || searchContent.trim() === '') return;
     setLoading(true);
     try {
       const res = await instance(
@@ -75,9 +75,6 @@ export default function Search() {
     setLoading(false);
   };
 
-  const handleClick = () => {
-    searchField === 'video' ? setSearchField('user') : setSearchField('video');
-  };
   return (
     <div
       className='
@@ -92,12 +89,18 @@ export default function Search() {
       <SearchBox searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
       <div className='flex flex-none justify-center gap-3 w-full h-7 my-1 border-b-2'>
         <div
-          onClick={handleClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSearchField('video');
+          }}
           className={`${searchField === 'video' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
           Video
         </div>
         <div
-          onClick={handleClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSearchField('user');
+          }}
           className={`${searchField === 'user' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
           Người dùng
         </div>

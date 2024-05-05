@@ -22,9 +22,6 @@ export default function VideoBoard(props) {
       console.error(error);
     }
   }, [board]);
-  const handleClick = () => {
-    setBoard('likedVideo' === board ? 'userVideo' : 'likedVideo');
-  };
   return (
     <div
       className='
@@ -37,7 +34,10 @@ export default function VideoBoard(props) {
     '>
       <div className='flex justify-center gap-5 w-full h-4 my-2'>
         <div
-          onClick={handleClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            setBoard('userVideo');
+          }}
           className={`${board === 'userVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
           <FaRegUser />
         </div>
@@ -48,7 +48,10 @@ export default function VideoBoard(props) {
             border-gray-400
           '></span>
         <div
-          onClick={handleClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            setBoard('likedVideo');
+          }}
           className={`${board === 'likedVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
           <FaRegHeart />
         </div>

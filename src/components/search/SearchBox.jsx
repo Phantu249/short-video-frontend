@@ -1,4 +1,5 @@
 import { HiOutlineSearch } from 'react-icons/hi';
+import { IoIosCloseCircle } from 'react-icons/io';
 
 export default function SearchBox(props) {
   return (
@@ -33,7 +34,7 @@ export default function SearchBox(props) {
                 rounded-xl
                 bg-gray-200
                 p-3
-                pl-8
+                px-8
                 outline-0'
             autoComplete='off'
             type='text'
@@ -42,7 +43,15 @@ export default function SearchBox(props) {
             value={props.searchContent}
             onChange={(e) => props.setSearchContent(e.target.value)}
           />
+
           <HiOutlineSearch className='absolute left-1 size-6' />
+          <IoIosCloseCircle
+            onClick={(e) => {
+              e.stopPropagation();
+              props.setSearchContent('');
+            }}
+            className={` right-3 size-4 text-gray-600 ${props.searchContent !== '' && props.searchContent.trim() !== '' ? 'absolute' : 'hidden'}`}
+          />
         </div>
         <button
           className='ml-2 text-red-500 drop-shadow w-fit'

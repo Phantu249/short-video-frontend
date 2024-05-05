@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../App.jsx';
 import { useAsync } from 'react-use';
@@ -15,8 +15,14 @@ export default function UserProfile() {
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
   const navigate = useNavigate();
-  const { isAuth } = useContext(AppContext);
+  const { isAuth, userId } = useContext(AppContext);
   const id = useParams().pk;
+
+  useEffect(() => {
+    if (id - '0' === userId) {
+      return navigate('/profile');
+    }
+  }, []);
 
   useAsync(async () => {
     try {

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { instanceWToken } from '../../instance.js';
 import { useAsync } from 'react-use';
 import EditProfile from './EditProfile.jsx';
+import Follow from '../../components/profile/Follow.jsx';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 export default function Profile() {
   const [username, setUsername] = useState('');
@@ -16,7 +18,9 @@ export default function Profile() {
   const [last_name, setLast_name] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [isFollowOpen, setIsFollowOpen] = useState(false);
   const navigate = useNavigate();
+  const [followType, setFollowType] = useState('follower');
   const { isAuth, setLoading } = useContext(AppContext);
 
   useAsync(async () => {
@@ -67,6 +71,8 @@ export default function Profile() {
         likeCount={likeCount}
         setIsEditOpen={setIsEditOpen}
         owner={true}
+        setFollowType={setFollowType}
+        setIsFollowOpen={setIsFollowOpen}
       />
       {userId && <VideoBoard user_id={userId} />}
       <EditProfile
@@ -77,6 +83,8 @@ export default function Profile() {
         isEditOpen={isEditOpen}
         setIsEditOpen={setIsEditOpen}
       />
+      <ConfirmDialog className='absolute z-[100]' />
+      <Follow user_id={userId} isFollowOpen={isFollowOpen} setIsFollowOpen={setIsFollowOpen} followType={followType} />
     </div>
   );
 }

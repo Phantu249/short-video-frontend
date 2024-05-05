@@ -8,7 +8,7 @@ export default function ReceiverMsg(props) {
           h-fit
           gap-1'>
       <div className='flex flex-none w-10 h-10 rounded-full border-2 border-gray-700 mt-2 overflow-hidden'>
-        <img src={props.profile.profile_pic} alt='avt' className='object-cover w-10 h-10' />
+        <img src={props.profile.profile_pic} alt='avt' className='object-cover w-10 h-10 pb-1' />
       </div>
       <div
         className='

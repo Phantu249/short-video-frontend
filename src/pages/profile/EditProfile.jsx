@@ -91,7 +91,7 @@ export default function EditProfile(props) {
             flex
             flex-col
             w-full
-            h-fit
+            h-full
             items-center
             border-b-2
             relative
@@ -155,7 +155,7 @@ export default function EditProfile(props) {
                 value={editFName}
                 onChange={(e) => setEditFName(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0)] focus:border-[rgba(209,213,219,1)] h-8 w-full text-right mx-2'
+                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
               />
             </div>
             <div className='flex w-full '>
@@ -170,7 +170,7 @@ export default function EditProfile(props) {
                 value={editLName}
                 onChange={(e) => setEditLName(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0)] focus:border-[rgba(209,213,219,1)] h-8 w-full text-right mx-2'
+                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
               />
             </div>
             <div className='flex w-full '>
@@ -185,7 +185,7 @@ export default function EditProfile(props) {
                 value={editBio}
                 onChange={(e) => setEditBio(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0)] focus:border-[rgba(209,213,219,1)] h-8 w-full text-right mx-2'
+                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
               />
             </div>
           </form>

@@ -1,15 +1,7 @@
-import {useState} from "react";
-
 const Header = (props) => {
-
-    const [homeState, setHomeState] = useState('forYou')
-
-    const handleClickHomeHeader = () => {
-        homeState === 'forYou' ? setHomeState('follow') : setHomeState('forYou')
-    }
-
-    return (
-        <div className="
+  return (
+    <div
+      className='
             absolute
             top-0
             w-full
@@ -22,31 +14,37 @@ const Header = (props) => {
             gap-2
             p-5
             drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]
-            "
-        >
-            <span
-                onClick={handleClickHomeHeader}
-                className={`
+            '>
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          props.setHomeState('follow');
+        }}
+        className={`
                     
-                    ${homeState === 'follow' ? 'opacity-[1]' : 'opacity-[0.5]'}
-                `}
-            >Đang theo dõi</span>
-            <span className="
+                    ${props.homeState === 'follow' ? 'opacity-[1]' : 'opacity-[0.5]'}
+                `}>
+        Đang theo dõi
+      </span>
+      <span
+        className='
                 w-0.5
                 h-4
                 bg-white
                 rounded
-                "
-            ></span>
-            <span
-                onClick={handleClickHomeHeader}
-                className={`
-                    ${homeState === 'forYou' ? 'opacity-[1]' : 'opacity-[0.5]'}
-                `}
-            >Dành cho bạn</span>
-        </div>
-    )
-
-}
+                '></span>
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          props.setHomeState('forYou');
+        }}
+        className={`
+                    ${props.homeState === 'forYou' ? 'opacity-[1]' : 'opacity-[0.5]'}
+                `}>
+        Dành cho bạn
+      </span>
+    </div>
+  );
+};
 
 export default Header;

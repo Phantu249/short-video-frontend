@@ -68,10 +68,19 @@ export default function ActionButtonContainer(props) {
 
   const handleClickShare = (e) => {
     e.stopPropagation();
+    // only use navigator.clipboard.writeText in https or localhost
+    if (!navigator.clipboard) return;
     navigator.clipboard
       .writeText(window.location.origin + '/video/' + props.video.id)
       .then(() => {
         console.log('Link copied to clipboard');
+        globalMessage.current.show([
+          {
+            severity: 'success',
+            detail: 'Link copied to clipboard',
+            closable: true,
+          },
+        ]);
       })
       .catch((err) => {
         console.error('Could not copy text: ', err);
@@ -96,7 +105,9 @@ export default function ActionButtonContainer(props) {
         '>
       <ActionButton handleClick={handleClickAvt}>
         <div className='w-10 h-10 rounded-full border-2 overflow-hidden'>
-          {props.video && <img src={props.video.profile_pic} alt='avt' className='object-cover w-10 h-10' />}
+          {props.video && (
+            <img src={props.video.profile_pic} alt='avt' className='object-cover rounded-full w-10 h-10 pb-1' />
+          )}
         </div>
       </ActionButton>
       <ActionButton handleClick={handleClickHeart}>
