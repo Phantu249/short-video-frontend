@@ -13,16 +13,28 @@ export default function VideoPlayer({ loadMore, videos, homeState }) {
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
   const [mouseDown, setMouseDown] = useState(false);
+  // const [videoLength, setVideoLength] = useState(0);
+
   useEffect(() => {
     setPlayingVideo(0);
   }, [homeState]);
 
   useEffect(() => {
+    if (videos.length === 0) return;
+    if (playingVideo + 2 >= videos.length) {
+      loadMore();
+    }
+  }, [playingVideo]);
+
+  useEffect(() => {
+    if (videos.length === 0) return;
     const videoSrc = videos[playingVideo].video_path;
     if (Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(videoSrc);
       hls.attachMedia(videoRef.current);
+    } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+      videoRef.current.src = videoSrc;
     }
     setIsPlaying(!videoRef.current.paused);
   }, [playingVideo]);
@@ -88,9 +100,6 @@ export default function VideoPlayer({ loadMore, videos, homeState }) {
     }
     setDirection('');
     // setIsPlaying(false);
-    if (videos.length === playingVideo + 2) {
-      loadMore();
-    }
   };
 
   useEffect(() => {
@@ -105,21 +114,17 @@ export default function VideoPlayer({ loadMore, videos, homeState }) {
     return () => {
       document.removeEventListener('keydown', handelKeyDown);
     };
-  }, [isCommentOpen]);
+  }, [isCommentOpen, videos]);
 
   const handelKeyDown = (e) => {
     if (e.key === 'ArrowUp') {
-      setPlayingVideo((cur) => (cur + 1) % videos.length);
-    }
-    if (e.key === 'ArrowDown') {
       setPlayingVideo((cur) => (cur - 1 + videos.length) % videos.length);
     }
-    if (videos.length === playingVideo + 2) {
-      loadMore();
+    if (e.key === 'ArrowDown') {
+      setPlayingVideo((cur) => (cur + 1) % videos.length);
     }
     // setIsPlaying(false);
   };
-
   return (
     <div
       className='
@@ -135,7 +140,7 @@ export default function VideoPlayer({ loadMore, videos, homeState }) {
             z-[1]
             bg-black
             h-full
-            
+
         '
       // style={{ display: display ? 'flex' : 'none' }}
       onClick={handleClick}

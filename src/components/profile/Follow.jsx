@@ -6,27 +6,39 @@ import { instanceWToken } from '../../instance.js';
 import { AppContext, MessagesContext } from '../../App.jsx';
 import SearchResult from '../../components/search/SearchResult.jsx';
 import { useAsync } from 'react-use';
+import { useDebounce } from '../../hook/Debounce.jsx';
 
 export default function Follow(props) {
   const [searchContent, setSearchContent] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
-  const { setLoading } = useContext(AppContext);
+  const { setLoading, setIsSearching } = useContext(AppContext);
+
+  const debounce = useDebounce(searchContent, 500);
 
   useAsync(async () => {
-    if (!props.isFollowOpen || searchContent !== '' || searchContent.trim() !== '') {
+    if (debounce) {
+      console.log(debounce);
+    }
+  }, [debounce]);
+
+  useAsync(async () => {
+    if (!props.isFollowOpen) {
       return;
     }
     console.log('reload');
+    setIsSearching(true);
     try {
-      const res = await instanceWToken(`getfollows?type=${props.followType}`);
+      const res = await instanceWToken(`getfollows?q=${encodeURIComponent(debounce)}&type=${props.followType}`);
       if (res.status === 200) {
         setSearchResult(res.data);
+        setIsSearching(false);
       }
     } catch (e) {
       console.log(e);
+      setIsSearching(false);
     }
-  }, [props.isFollowOpen, searchContent]);
+  }, [props.isFollowOpen, debounce]);
 
   const search = async () => {
     if (searchContent === '' || searchContent.trim() === '') return;
@@ -88,6 +100,8 @@ export default function Follow(props) {
           className='size-6 absolute top-5 left-1'
           onClick={(e) => {
             e.stopPropagation();
+            setSearchResult([]);
+            setSearchContent('');
             props.setIsFollowOpen(false);
           }}
         />

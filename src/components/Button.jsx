@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Button(props) {
+  const navigate = useNavigate();
   return (
     <button
       className='
@@ -13,6 +16,9 @@ export default function Button(props) {
                     '
       onClick={() => {
         props.setPage(props.page);
+        if (props.navigateTo === '/home' && window.location.pathname === '/home')
+          console.log('You are already on the home page');
+        navigate(props.navigateTo);
       }}>
       {props.children}
     </button>

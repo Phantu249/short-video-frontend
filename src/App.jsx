@@ -6,7 +6,8 @@ import { Messages } from 'primereact/messages';
 import ReactLoading from 'react-loading';
 import { jwtDecode } from 'jwt-decode';
 import useWebSocket from 'react-use-websocket';
-import { WS_URL } from './instance.js';
+import { instanceWToken, WS_URL } from './instance.js';
+import { useAsync } from 'react-use';
 
 export const AppContext = createContext();
 export const MessagesContext = createContext();
@@ -19,16 +20,24 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [hasNotif, setHasNotif] = useState(false);
   const [socketUrl, setSocketUrl] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
 
-  useEffect(() => {
+  useAsync(async () => {
     if (!localStorage.getItem('access_token')) {
       return;
     }
     try {
       const payload = jwtDecode(localStorage.getItem('access_token'));
       setUserId(payload.user_id);
-      setSocketUrl(`${WS_URL}notification/${payload.user_id}`);
       setIsAuth(!!localStorage.getItem('access_token'));
+      try {
+        const ticket = await instanceWToken.get('getticket');
+        if (ticket.status === 200) {
+          setSocketUrl(`${WS_URL}notification/${payload.user_id}?uuid=${ticket.data.uuid}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
@@ -46,7 +55,6 @@ function App() {
   }, [readyState]);
 
   useEffect(() => {
-    console.log('lastJsonMessage', lastJsonMessage);
     if (lastJsonMessage !== null) {
       if (lastJsonMessage.action === 'message') {
         return setHasNotif(true);
@@ -62,7 +70,8 @@ function App() {
   }, [lastJsonMessage]);
 
   return (
-    <AppContext.Provider value={{ isAuth, setIsAuth, setLoading, userId, hasNotif, setHasNotif }}>
+    <AppContext.Provider
+      value={{ isAuth, setIsAuth, setLoading, userId, hasNotif, setHasNotif, isSearching, setIsSearching }}>
       <div className='flex justify-center items-center'>
         <Messages ref={globalMessage} className='globalMessage' />
       </div>

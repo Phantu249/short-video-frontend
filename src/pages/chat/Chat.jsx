@@ -1,12 +1,12 @@
 import BackButton from '../../components/BackButton.jsx';
 import { CiPaperplane } from 'react-icons/ci';
 import { useContext, useEffect, useState } from 'react';
-import useWebSocket from 'react-use-websocket';
 import instance, { instanceWToken, WS_URL } from '../../instance.js';
 import MessageContainer from './MessageContainer.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 import { AppContext } from '../../App.jsx';
+import useWebSocket from 'react-use-websocket';
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -15,10 +15,23 @@ export default function Chat() {
   const [ReceiverLastName, setReceiverLastName] = useState('');
   const [ReceiverProfile, setReceiverProfile] = useState();
   const [ReceiverFirstname, setReceiverFirstname] = useState('');
+  const [socketURL, setSocketURL] = useState(null);
   const { userId } = useContext(AppContext);
   const receiverId = useParams().pk;
 
   useAsync(async () => {
+    try {
+      const ticket = await instanceWToken.get('getticket');
+      if (ticket.status === 200) {
+        setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?uuid=${ticket.data.uuid}`);
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.response.status === 401) {
+        return navigate('/login');
+      }
+    }
+
     try {
       const res = await instance.get(`user/${receiverId}`);
       if (res.status === 200) {
@@ -45,9 +58,9 @@ export default function Chat() {
         return navigate('/login');
       }
     }
-  }, []);
+  }, [userId]);
 
-  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(`${WS_URL}chat/${userId}/${receiverId}`, {
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketURL, {
     retryOnError: true,
     shouldReconnect: (closeEvent) => true,
   });

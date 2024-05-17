@@ -71,7 +71,7 @@ export default function Message(props) {
           <span className='font-bold text-start'>
             {props.data.user.first_name} {props.data.user.last_name}
           </span>
-          <span className='text-sm min-w-24'>{formatTimeAgo(props.data.timestamp)}</span>
+          <span className='text-sm text-right min-w-24'>{formatTimeAgo(props.data.timestamp)}</span>
         </div>
         {props.data.sender_id === userId ? (
           <div className='text-sm w-full h-10 overflow-hidden text-gray-500'>{props.data.msg}</div>

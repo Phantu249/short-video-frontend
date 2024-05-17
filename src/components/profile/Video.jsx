@@ -86,6 +86,7 @@ export default function Video(props) {
             object-cover
             bg-gray-500
       '
+        loading={'lazy'}
         src={props.video.thumbnail}
         alt='videoAlt'
         onClick={handleVideoClick}

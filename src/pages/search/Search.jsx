@@ -4,21 +4,36 @@ import instance from '../../instance.js';
 import { useAsync } from 'react-use';
 import { AppContext, MessagesContext } from '../../App.jsx';
 import SearchResult from '../../components/search/SearchResult.jsx';
+import { useDebounce } from '../../hook/Debounce.jsx';
 
 export default function Search() {
   const [searchField, setSearchField] = useState('video');
   const [searchContent, setSearchContent] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
-  const { setLoading } = useContext(AppContext);
+  const { setLoading, setIsSearching } = useContext(AppContext);
 
-  // const debounce = useDebounce(searchContent, 500);
-  //
-  // useAsync(async () => {
-  //   if (debounce) {
-  //     console.log(debounce);
-  //   }
-  // }, [debounce]);
+  const debounce = useDebounce(searchContent, 500);
+
+  useAsync(async () => {
+    if (debounce) {
+      console.log(debounce);
+      setIsSearching(true);
+      try {
+        const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=${encodeURIComponent(searchField)}`);
+        if (res.status === 200) {
+          console.log(res.data);
+          if (res.data.length > 0) {
+            setSearchResult(res.data);
+          }
+          setIsSearching(false);
+        }
+      } catch (e) {
+        console.log(e);
+        setIsSearching(false);
+      }
+    }
+  }, [debounce]);
 
   useAsync(async () => {
     setSearchResult([]);

@@ -5,12 +5,45 @@ import { useContext, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
 import { AppContext, MessagesContext } from '../../App.jsx';
 import SearchResult from '../../components/search/SearchResult.jsx';
+import { useAsync } from 'react-use';
+import { useDebounce } from '../../hook/Debounce.jsx';
 
 export default function ChatSearch(props) {
   const [searchContent, setSearchContent] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
-  const { setLoading } = useContext(AppContext);
+  const { setLoading, setIsSearching } = useContext(AppContext);
+
+  const debounce = useDebounce(searchContent, 500);
+
+  useAsync(async () => {
+    if (debounce) {
+      console.log(debounce);
+      setIsSearching(true);
+      try {
+        const res = await instanceWToken(`search?q=${encodeURIComponent(debounce)}&type=user`);
+        if (res.status === 200) {
+          console.log(res.data);
+          if (res.data.length > 0) {
+            setSearchResult(res.data);
+          } else {
+            globalMessage.current.show([
+              {
+                severity: 'error',
+                detail: 'Không tìm thây kết quả phù hợp',
+                closable: true,
+              },
+            ]);
+          }
+          setIsSearching(false);
+        }
+      } catch (e) {
+        console.log(e);
+        setIsSearching(false);
+      }
+    }
+  }, [debounce]);
+
   const search = async () => {
     if (searchContent === '' || searchContent.trim() === '') return;
     setLoading(true);

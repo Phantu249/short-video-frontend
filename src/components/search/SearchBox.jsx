@@ -1,7 +1,11 @@
 import { HiOutlineSearch } from 'react-icons/hi';
 import { IoIosCloseCircle } from 'react-icons/io';
+import { RiLoader2Fill } from 'react-icons/ri';
+import { useContext } from 'react';
+import { AppContext } from '../../App.jsx';
 
 export default function SearchBox(props) {
+  const { isSearching } = useContext(AppContext);
   return (
     <div
       className='
@@ -50,7 +54,10 @@ export default function SearchBox(props) {
               e.stopPropagation();
               props.setSearchContent('');
             }}
-            className={` right-3 size-4 text-gray-600 ${props.searchContent !== '' && props.searchContent.trim() !== '' ? 'absolute' : 'hidden'}`}
+            className={` right-3 size-4 text-gray-600 ${props.searchContent !== '' && props.searchContent.trim() !== '' && !isSearching ? 'absolute' : 'hidden'}`}
+          />
+          <RiLoader2Fill
+            className={`animate-spin right-3 size-4 text-gray-600 ${isSearching ? 'absolute' : 'hidden'}`}
           />
         </div>
         <button
