@@ -1,23 +1,19 @@
 import DetailVideo from './home/DetailVideo.jsx';
 import ActionButtonContainer from './home/ActionButtonContainer.jsx';
 import CommentContainer from './home/CommentContainer.jsx';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import Hls from 'hls.js';
+import { AppContext } from '../App.jsx';
 
-export default function VideoPlayer({ loadMore, videos, homeState }) {
+export default function VideoPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const videoRef = useRef(null);
-  const [playingVideo, setPlayingVideo] = useState(0);
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
   const [mouseDown, setMouseDown] = useState(false);
-  // const [videoLength, setVideoLength] = useState(0);
-
-  useEffect(() => {
-    setPlayingVideo(0);
-  }, [homeState]);
+  const { playingVideo, setPlayingVideo, videos, loadMore } = useContext(AppContext);
 
   useEffect(() => {
     if (videos.length === 0) return;

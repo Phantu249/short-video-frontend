@@ -1,4 +1,8 @@
+import { useContext } from 'react';
+import { AppContext } from '../App.jsx';
+
 const Header = (props) => {
+  const { homeState, setHomeState } = useContext(AppContext);
   return (
     <div
       className='
@@ -18,11 +22,11 @@ const Header = (props) => {
       <span
         onClick={(e) => {
           e.stopPropagation();
-          props.setHomeState('follow');
+          setHomeState('follow');
         }}
         className={`
                     font-semibold
-                    ${props.homeState === 'follow' ? 'opacity-[1] ' : 'opacity-[0.6]'}
+                    ${homeState === 'follow' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Đang theo dõi
       </span>
@@ -36,10 +40,10 @@ const Header = (props) => {
       <span
         onClick={(e) => {
           e.stopPropagation();
-          props.setHomeState('forYou');
+          setHomeState('forYou');
         }}
         className={` font-semibold
-                    ${props.homeState === 'forYou' ? 'opacity-[1] ' : 'opacity-[0.6]'}
+                    ${homeState === 'forYou' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Dành cho bạn
       </span>

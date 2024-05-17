@@ -1,12 +1,12 @@
 import './App.css';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import { createContext, useEffect, useRef, useState } from 'react';
 import { Messages } from 'primereact/messages';
 import ReactLoading from 'react-loading';
 import { jwtDecode } from 'jwt-decode';
 import useWebSocket from 'react-use-websocket';
-import { instanceWToken, WS_URL } from './instance.js';
+import instance, { instanceWToken, WS_URL } from './instance.js';
 import { useAsync } from 'react-use';
 
 export const AppContext = createContext();
@@ -21,6 +21,12 @@ function App() {
   const [hasNotif, setHasNotif] = useState(false);
   const [socketUrl, setSocketUrl] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
+
+  const [videos, setVideos] = useState([]);
+  const [watched, setWatched] = useState([]);
+  const [homeState, setHomeState] = useState('forYou');
+  const [playingVideo, setPlayingVideo] = useState(0);
 
   useAsync(async () => {
     if (!localStorage.getItem('access_token')) {
@@ -69,9 +75,94 @@ function App() {
     }
   }, [lastJsonMessage]);
 
+  useAsync(async () => {
+    setLoading(true);
+    setVideos([]);
+    setWatched([]);
+    const data = {
+      type: homeState,
+      watched: [],
+    };
+    try {
+      if (isAuth) {
+        const response = await instanceWToken.post(`videorecommend`, data);
+        if (response.status === 200) {
+          setVideos(response.data);
+          const arr = response.data.map((video) => video.id);
+          setWatched(arr);
+        }
+      } else {
+        const response = await instance.post(`videorecommend`, data);
+        if (response.status === 200) {
+          setVideos(response.data);
+          const arr = response.data.map((video) => video.id);
+          setWatched(arr);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      if (error.response.status === 401) {
+        return navigate('/login');
+      }
+    }
+    setLoading(false);
+  }, [homeState]);
+
+  useEffect(() => {
+    setPlayingVideo(0);
+  }, [homeState]);
+
+  const loadMore = async () => {
+    const data = {
+      type: homeState,
+      watched,
+    };
+    try {
+      if (isAuth) {
+        const response = await instanceWToken.post(`videorecommend`, data);
+        if (response.status === 200) {
+          setVideos((prev) => [...prev, ...response.data]);
+          const arr = response.data.map((video) => video.id);
+          setWatched((prev) => [...prev, ...arr]);
+        }
+      } else {
+        const response = await instance.post(`videorecommend`, data);
+        if (response.status === 200) {
+          setVideos((prev) => [...prev, ...response.data]);
+          const arr = response.data.map((video) => video.id);
+          setWatched((prev) => [...prev, ...arr]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 401) {
+        return navigate('/login');
+      }
+    }
+  };
+
   return (
     <AppContext.Provider
-      value={{ isAuth, setIsAuth, setLoading, userId, hasNotif, setHasNotif, isSearching, setIsSearching }}>
+      value={{
+        isAuth,
+        setIsAuth,
+        setLoading,
+        userId,
+        hasNotif,
+        setHasNotif,
+        isSearching,
+        setIsSearching,
+        videos,
+        setVideos,
+        watched,
+        setWatched,
+        homeState,
+        setHomeState,
+        playingVideo,
+        setPlayingVideo,
+        loadMore,
+      }}>
       <div className='flex justify-center items-center'>
         <Messages ref={globalMessage} className='globalMessage' />
       </div>
