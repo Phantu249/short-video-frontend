@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AppContext } from '../App.jsx';
 
 const Header = (props) => {
-  const { homeState, setHomeState } = useContext(AppContext);
+  const { homeState, setHomeState, setReloadHome } = useContext(AppContext);
   return (
     <div
       className='
@@ -23,6 +23,7 @@ const Header = (props) => {
         onClick={(e) => {
           e.stopPropagation();
           setHomeState('follow');
+          setReloadHome(true);
         }}
         className={`
                     font-semibold
@@ -41,6 +42,7 @@ const Header = (props) => {
         onClick={(e) => {
           e.stopPropagation();
           setHomeState('forYou');
+          setReloadHome(true);
         }}
         className={` font-semibold
                     ${homeState === 'forYou' ? 'opacity-[1] ' : 'opacity-[0.6]'}

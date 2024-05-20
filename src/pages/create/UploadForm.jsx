@@ -10,7 +10,7 @@ export default function UploadForm(props) {
   const [file, setFile] = useState(null);
   const globalMessage = useContext(MessagesContext);
   const navigate = useNavigate();
-  const { setLoading } = useContext(AppContext);
+  const { setLoading, setReloadHome } = useContext(AppContext);
   const handleUpload = async () => {
     if (!file) return;
     setLoading(true);
@@ -30,6 +30,7 @@ export default function UploadForm(props) {
             closable: true,
           },
         ]);
+        setReloadHome(true);
         navigate('/home');
       }
     } catch (err) {

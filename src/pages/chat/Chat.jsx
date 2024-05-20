@@ -15,22 +15,27 @@ export default function Chat() {
   const [ReceiverLastName, setReceiverLastName] = useState('');
   const [ReceiverProfile, setReceiverProfile] = useState();
   const [ReceiverFirstname, setReceiverFirstname] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
+
   const [socketURL, setSocketURL] = useState(null);
   const { userId } = useContext(AppContext);
   const receiverId = useParams().pk;
 
   useAsync(async () => {
-    try {
-      const ticket = await instanceWToken.get('getticket');
-      if (ticket.status === 200) {
-        setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?uuid=${ticket.data.uuid}`);
-      }
-    } catch (err) {
-      console.log(err);
-      if (err.response.status === 401) {
-        return navigate('/login');
-      }
-    }
+    // try {
+    //   const ticket = await instanceWToken.get('getticket');
+    //   if (ticket.status === 200) {
+    //     setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?uuid=${ticket.data.uuid}`);
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   if (err.response.status === 401) {
+    //     return navigate('/login');
+    //   }
+    // }
+    setIsFetching(true);
+
+    if (userId) setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?token=${localStorage.getItem('access_token')}`);
 
     try {
       const res = await instance.get(`user/${receiverId}`);
@@ -48,7 +53,7 @@ export default function Chat() {
     }
 
     try {
-      const res = await instanceWToken.get(`message?receiver_id=${encodeURIComponent(receiverId)}`);
+      const res = await instanceWToken.get(`messages?receiver_id=${encodeURIComponent(receiverId)}`);
       if (res.status === 200) {
         setMessages(res.data);
       }
@@ -58,6 +63,7 @@ export default function Chat() {
         return navigate('/login');
       }
     }
+    setIsFetching(false);
   }, [userId]);
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketURL, {
@@ -66,7 +72,7 @@ export default function Chat() {
   });
 
   useEffect(() => {
-    console.log('ready', readyState);
+    console.log('chat ws status:', readyState);
   }, [readyState]);
 
   useEffect(() => {
@@ -97,6 +103,27 @@ export default function Chat() {
     navigate(`/user/${receiverId}`);
   };
 
+  const fetchMore = async () => {
+    setIsFetching(true);
+    try {
+      const res = await instanceWToken.get(
+        `messages?receiver_id=${encodeURIComponent(receiverId)}&length=${messages.length}`,
+      );
+      if (res.status === 200) {
+        if (res.data.length > 0) {
+          setMessages([...res.data, ...messages]);
+        }
+        setIsFetching(false);
+      }
+    } catch (err) {
+      setIsFetching(false);
+      console.log(err);
+      if (err.response.status === 401) {
+        return navigate('/login');
+      }
+    }
+  };
+
   return (
     <div
       className='
@@ -120,13 +147,20 @@ export default function Chat() {
             flex-none
             border-b-2
             font-semibold
-
             pl-12
             '>
         {ReceiverFirstname} {ReceiverLastName}
         <BackButton />
       </div>
-      <MessageContainer messages={messages} user={userId} profile={ReceiverProfile} name={ReceiverFirstname} />
+      <MessageContainer
+        isFetching={isFetching}
+        fetchMore={fetchMore}
+        setMsg={setMessages}
+        messages={messages}
+        user={userId}
+        profile={ReceiverProfile}
+        name={ReceiverFirstname}
+      />
       <div
         className='
             flex

@@ -27,6 +27,7 @@ function App() {
   const [watched, setWatched] = useState([]);
   const [homeState, setHomeState] = useState('forYou');
   const [playingVideo, setPlayingVideo] = useState(0);
+  const [reloadHome, setReloadHome] = useState(true);
 
   useAsync(async () => {
     if (!localStorage.getItem('access_token')) {
@@ -36,14 +37,16 @@ function App() {
       const payload = jwtDecode(localStorage.getItem('access_token'));
       setUserId(payload.user_id);
       setIsAuth(!!localStorage.getItem('access_token'));
-      try {
-        const ticket = await instanceWToken.get('getticket');
-        if (ticket.status === 200) {
-          setSocketUrl(`${WS_URL}notification/${payload.user_id}?uuid=${ticket.data.uuid}`);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      setSocketUrl(`${WS_URL}notification/${payload.user_id}?token=${localStorage.getItem('access_token')}`);
+
+      // try {
+      //   const ticket = await instanceWToken.get('getticket');
+      //   if (ticket.status === 200) {
+      //     setSocketUrl(`${WS_URL}notification/${payload.user_id}?uuid=${ticket.data.uuid}`);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     } catch (error) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
@@ -51,8 +54,23 @@ function App() {
     }
   }, [localStorage.getItem('access_token')]);
 
+  // const reConnect = async () => {
+  //   setSocketUrl(null);
+  //
+  //   try {
+  //     const ticket = await instanceWToken.get('getticket');
+  //     if (ticket.status === 200) {
+  //       setSocketUrl(`${WS_URL}notification/${userId}?uuid=${ticket.data.uuid}`);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
-    shouldReconnect: (closeEvent) => true,
+    shouldReconnect: (closeEvent) => {
+      return isAuth;
+    },
     retryOnError: true,
   });
 
@@ -76,6 +94,8 @@ function App() {
   }, [lastJsonMessage]);
 
   useAsync(async () => {
+    if (!reloadHome) return;
+    console.log('reload home');
     setLoading(true);
     setVideos([]);
     setWatched([]);
@@ -107,11 +127,9 @@ function App() {
       }
     }
     setLoading(false);
-  }, [homeState]);
-
-  useEffect(() => {
     setPlayingVideo(0);
-  }, [homeState]);
+    setReloadHome(false);
+  }, [reloadHome]);
 
   const loadMore = async () => {
     const data = {
@@ -141,7 +159,6 @@ function App() {
       }
     }
   };
-
   return (
     <AppContext.Provider
       value={{
@@ -161,6 +178,8 @@ function App() {
         setHomeState,
         playingVideo,
         setPlayingVideo,
+        setReloadHome,
+        reloadHome,
         loadMore,
       }}>
       <div className='flex justify-center items-center'>

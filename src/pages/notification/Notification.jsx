@@ -71,7 +71,7 @@ export default function Notification() {
             z-[10]
             flex-none
             '>
-        Thông báo
+        Tin nhắn
         <HiOutlineSearch
           className='absolute right-2 top-2 size-6'
           onClick={(e) => {

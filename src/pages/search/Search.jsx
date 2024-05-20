@@ -17,7 +17,6 @@ export default function Search() {
 
   useAsync(async () => {
     if (debounce) {
-      console.log(debounce);
       setIsSearching(true);
       try {
         const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=${encodeURIComponent(searchField)}`);

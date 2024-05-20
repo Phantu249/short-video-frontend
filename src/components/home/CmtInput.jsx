@@ -1,14 +1,28 @@
 import { CiPaperplane } from 'react-icons/ci';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
+import { AppContext, MessagesContext } from '../../App.jsx';
 
 export default function CmtInput(props) {
   const [commentContent, setCommentContent] = useState('');
+  const { isAuth } = useContext(AppContext);
+  const globalMessage = useContext(MessagesContext);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (commentContent === '' || commentContent.trim() === '') return;
+    if (!isAuth) {
+      globalMessage.current.show([
+        {
+          severity: 'error',
+          detail: 'You need to Login',
+          closable: true,
+        },
+      ]);
+      return;
+    }
     const data = {
       comment_text: commentContent,
       video_id: props.video.id,

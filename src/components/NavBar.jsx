@@ -3,9 +3,10 @@ import { FaRegMessage, FaRegSquarePlus, FaRegUser } from 'react-icons/fa6';
 import { HiOutlineHome, HiOutlineSearch } from 'react-icons/hi';
 import { useContext } from 'react';
 import { AppContext } from '../App.jsx';
+import { TbReload } from 'react-icons/tb';
 
 const NavBar = (props) => {
-  const { hasNotif } = useContext(AppContext);
+  const { hasNotif, reloadHome } = useContext(AppContext);
   return (
     <div
       className='
@@ -22,40 +23,24 @@ const NavBar = (props) => {
             '>
       <Button setPage={props.setPage} page={'home'} navigateTo={'/home'}>
         {/*<Link className={'customLink'} to='/home'>*/}
-        <HiOutlineHome
-          className='
-                size-6
-                '
-        />
+        {reloadHome ? <TbReload className='size-6 animate-spin' /> : <HiOutlineHome className='size-6' />}
         Trang chủ
         {/*</Link>*/}
       </Button>
       <Button setPage={props.setPage} page={'search'} navigateTo={'/search'}>
         {/*<Link className={'customLink'} to='/search'>*/}
-        <HiOutlineSearch
-          className='
-                size-6
-                '
-        />
+        <HiOutlineSearch className='size-6' />
         Tìm kiếm
         {/*</Link>*/}
       </Button>
       <Button setPage={props.setPage} page={'create'} navigateTo={'/create'}>
         {/*<Link className={'customLink'} to='/create'>*/}
-        <FaRegSquarePlus
-          className='
-                size-7
-                '
-        />
+        <FaRegSquarePlus className='size-7' />
         {/*</Link>*/}
       </Button>
       <Button setPage={props.setPage} page={'notification'} navigateTo={'/notification'}>
         {/*<Link className={'customLink'} to='/notification'>*/}
-        <FaRegMessage
-          className='
-                size-5
-                '
-        />
+        <FaRegMessage className='size-5' />
         Tin nhắn
         <div
           className={`${hasNotif ? 'display' : 'hidden'} animate-ping absolute top-2 right-[40%] w-2 h-2 z-[200] rounded-full bg-red-500`}></div>
@@ -63,11 +48,7 @@ const NavBar = (props) => {
       </Button>
       <Button setPage={props.setPage} page={'profile'} navigateTo={'/profile'}>
         {/*<Link className={'customLink'} to='/profile'>*/}
-        <FaRegUser
-          className='
-                size-5
-                '
-        />
+        <FaRegUser className='size-5' />
         Hồ sơ
         {/*</Link>*/}
       </Button>

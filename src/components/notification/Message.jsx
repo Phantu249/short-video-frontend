@@ -68,7 +68,7 @@ export default function Message(props) {
                 overflow-hidden
                 pt-1
                 place-content-between'>
-          <span className='font-bold text-start'>
+          <span className='flex font-bold text-start '>
             {props.data.user.first_name} {props.data.user.last_name}
           </span>
           <span className='text-sm text-right min-w-24'>{formatTimeAgo(props.data.timestamp)}</span>

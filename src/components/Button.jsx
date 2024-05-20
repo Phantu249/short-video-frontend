@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AppContext } from '../App.jsx';
 
 export default function Button(props) {
   const navigate = useNavigate();
+  const { setReloadHome } = useContext(AppContext);
   return (
     <button
       className='
@@ -16,8 +19,7 @@ export default function Button(props) {
                     '
       onClick={() => {
         props.setPage(props.page);
-        if (props.navigateTo === '/home' && window.location.pathname === '/home')
-          console.log('You are already on the home page');
+        if (props.navigateTo === '/home' && window.location.pathname === '/home') setReloadHome(true);
         navigate(props.navigateTo);
       }}>
       {props.children}

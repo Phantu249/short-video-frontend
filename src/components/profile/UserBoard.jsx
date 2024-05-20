@@ -99,7 +99,9 @@ export default function UserBoard(props) {
       <div className='flex w-full justify-center m-2'>
         <ProfileButton onClick={handleEditProfile}>Sửa hồ sơ</ProfileButton>
       </div>
-      <div className='text-center w-full h-6 mb-2 px-2 overflow-y-auto'>{props.profile.bio}</div>
+      <div className='text-center w-full h-fit max-h-12 mb-2 px-2 text-ellipsis overflow-x-hidden overflow-y-auto'>
+        {props.profile.bio}
+      </div>
     </div>
   );
 }

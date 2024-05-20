@@ -71,7 +71,9 @@ export default function UserBoardNotOwner(props) {
         <FollowButton userid={props.user_id} />
         <ProfileButton onClick={handleMessageClick}>Nhắn tin</ProfileButton>
       </div>
-      <div className='text-center w-full h-6 mb-2 px-2 overflow-y-auto'>{props.profile.bio}</div>
+      <div className='text-center w-full max-h-12 h-fit mb-2 px-2 text-ellipsis overflow-x-hidden overflow-y-auto'>
+        {props.profile.bio}
+      </div>
     </div>
   );
 }

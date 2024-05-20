@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react';
 import { useAsync } from 'react-use';
-import { AppContext } from '../../App.jsx';
+import { AppContext, MessagesContext } from '../../App.jsx';
 import { instanceWToken } from '../../instance.js';
 
 export default function FollowButton(props) {
   const [isFollowing, setIsFollowing] = useState(false);
   const { isAuth } = useContext(AppContext);
+  const globalMessage = useContext(MessagesContext);
 
   useAsync(async () => {
     if (!isAuth) return;
@@ -24,7 +25,16 @@ export default function FollowButton(props) {
   }, []);
   const handleFollowClick = async (e) => {
     e.stopPropagation();
-    if (!isAuth) return;
+    if (!isAuth) {
+      globalMessage.current.show([
+        {
+          severity: 'error',
+          detail: 'You need to Login',
+          closable: true,
+        },
+      ]);
+      return;
+    }
     const data = {
       followed_user_id: props.userid,
     };

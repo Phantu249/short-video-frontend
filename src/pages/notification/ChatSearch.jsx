@@ -18,7 +18,6 @@ export default function ChatSearch(props) {
 
   useAsync(async () => {
     if (debounce) {
-      console.log(debounce);
       setIsSearching(true);
       try {
         const res = await instanceWToken(`search?q=${encodeURIComponent(debounce)}&type=user`);

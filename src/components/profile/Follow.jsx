@@ -16,11 +16,11 @@ export default function Follow(props) {
 
   const debounce = useDebounce(searchContent, 500);
 
-  useAsync(async () => {
-    if (debounce) {
-      console.log(debounce);
-    }
-  }, [debounce]);
+  // useAsync(async () => {
+  //   if (debounce) {
+  //     console.log(debounce);
+  //   }
+  // }, [debounce]);
 
   useAsync(async () => {
     if (!props.isFollowOpen) {
