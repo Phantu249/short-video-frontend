@@ -43,6 +43,7 @@ export default function Message(props) {
             items-center
             bg-gray-100
             rounded-xl
+            cursor-pointer
     '>
       <img
         src={`${props.data.profile_pic}`}

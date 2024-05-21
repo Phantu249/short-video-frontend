@@ -38,7 +38,7 @@ export default function VideoBoard(props) {
             e.stopPropagation();
             setBoard('userVideo');
           }}
-          className={`${board === 'userVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
+          className={`cursor-pointer ${board === 'userVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
           <FaRegUser />
         </div>
         <span
@@ -52,7 +52,7 @@ export default function VideoBoard(props) {
             e.stopPropagation();
             setBoard('likedVideo');
           }}
-          className={`${board === 'likedVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
+          className={`cursor-pointer ${board === 'likedVideo' ? 'text-black border-b-2 border-black' : 'text-gray-400'} h-5`}>
           <FaRegHeart />
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function UserBoard(props) {
       />
       <div>@{props.username}</div>
       <div className='flex w-full justify-center items-center gap-2'>
-        <div className='text-center w-20 font-semibold' onClick={handleFollowingClick}>
+        <div className='text-center w-20 font-semibold cursor-pointer' onClick={handleFollowingClick}>
           <div>{props.follow.following}</div>
           <div className='text-gray-400 font-normal'>Following</div>
         </div>
@@ -81,7 +81,7 @@ export default function UserBoard(props) {
             border-l-2
             border-gray-400
           '></span>
-        <div className='text-center w-20 font-semibold' onClick={handleFollowerClick}>
+        <div className='text-center w-20 font-semibold cursor-pointer' onClick={handleFollowerClick}>
           <div>{props.follow.follower}</div>
           <div className='text-gray-400 font-normal'>Follower</div>
         </div>

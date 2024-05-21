@@ -107,7 +107,7 @@ export default function Search() {
             e.stopPropagation();
             setSearchField('video');
           }}
-          className={`${searchField === 'video' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
+          className={`cursor-pointer ${searchField === 'video' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
           Video
         </div>
         <div
@@ -115,7 +115,7 @@ export default function Search() {
             e.stopPropagation();
             setSearchField('user');
           }}
-          className={`${searchField === 'user' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
+          className={`cursor-pointer ${searchField === 'user' ? 'text-black border-b-2 border-black' : 'text-gray-400'} `}>
           Người dùng
         </div>
       </div>

@@ -51,6 +51,7 @@ export default function CommentContainer(props) {
                     absolute
                     right-3
                     top-3
+                    cursor-pointer
                     scale-125'
         onClick={() => props.setIsCommentOpen(false)}>
         <FaXmark />

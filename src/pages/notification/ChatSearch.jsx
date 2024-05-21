@@ -100,7 +100,7 @@ export default function ChatSearch(props) {
             relative
         '>
         <IoIosArrowBack
-          className='size-6 absolute top-5 left-1'
+          className='size-6 absolute top-5 left-1 cursor-pointer'
           onClick={(e) => {
             e.stopPropagation();
             props.setIsChatSearchOpen(false);

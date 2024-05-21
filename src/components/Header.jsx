@@ -26,7 +26,7 @@ const Header = (props) => {
           setReloadHome(true);
         }}
         className={`
-                    font-semibold
+                    font-semibold cursor-pointer
                     ${homeState === 'follow' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Đang theo dõi
@@ -44,7 +44,7 @@ const Header = (props) => {
           setHomeState('forYou');
           setReloadHome(true);
         }}
-        className={` font-semibold
+        className={` font-semibold cursor-pointer
                     ${homeState === 'forYou' ? 'opacity-[1] ' : 'opacity-[0.6]'}
                 `}>
         Dành cho bạn

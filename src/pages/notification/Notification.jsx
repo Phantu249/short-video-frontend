@@ -73,7 +73,7 @@ export default function Notification() {
             '>
         Tin nhắn
         <HiOutlineSearch
-          className='absolute right-2 top-2 size-6'
+          className='absolute right-2 top-2 size-6 cursor-pointer'
           onClick={(e) => {
             e.stopPropagation();
             setIsChatSearchOpen(true);
