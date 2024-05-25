@@ -39,11 +39,11 @@ export default function CommentContainer(props) {
                 absolute
                 w-full
                 h-2/3
-                z-[4]
+                z-[10]
                 bg-white
                 bottom-0
                 rounded-t-xl
-            '
+                '
       onClick={handleCommentContainerClick}>
       <div className='flex justify-center m-1 p-1'>Comment</div>
       <div
@@ -64,9 +64,8 @@ export default function CommentContainer(props) {
                     flex-grow
                     w-full
                     overflow-y-auto
-                    z-[4]
-                    h-full
-            '>
+                    z-[11]
+                    h-full'>
         {comments?.map((cmt, index) => (
           <Comment key={index} cmt={cmt.comment_text} user={cmt.fullname} />
         ))}
