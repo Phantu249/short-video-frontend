@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { FaPlay } from 'react-icons/fa6';
 import DetailVideo from './home/DetailVideo.jsx';
 import ActionButtonContainer from './home/ActionButtonContainer.jsx';
@@ -8,6 +7,7 @@ import { useAsync } from 'react-use';
 import instance from '../instance.js';
 import { IoIosArrowBack } from 'react-icons/io';
 import Hls from 'hls.js';
+import { useParams } from 'react-router-dom';
 
 export default function OneVideoPlayer() {
   const { pk } = useParams();

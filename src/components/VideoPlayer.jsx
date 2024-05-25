@@ -139,7 +139,6 @@ export default function VideoPlayer() {
             z-[1]
             bg-black
             h-full
-
         '
       // style={{ display: display ? 'flex' : 'none' }}
       onClick={handleClick}
