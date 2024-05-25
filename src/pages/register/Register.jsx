@@ -12,6 +12,8 @@ export default function Register() {
   const [rePassword, setRePassword] = useState('');
   const navigate = useNavigate();
   const msgs = useRef(null);
+  const pas1 = useRef(null);
+  const pas2 = useRef(null);
 
   const validateUsername = (username) => {
     const re = /^[a-zA-Z][a-zA-Z0-9]{5,14}$/;
@@ -117,6 +119,7 @@ export default function Register() {
             type='password'
             name='password'
             id='password'
+            ref={pas1}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Type your Password'
@@ -133,15 +136,29 @@ export default function Register() {
             type='password'
             name='repassword'
             id='repassword'
+            ref={pas2}
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
             placeholder='Retype your Password'
-            className='outline-none border-b-2 h-10 pr-2 pl-8 w-full'
+            className='outline-none border-b-2 h-10 pr-2 pl-8 mb-2 w-full'
             required
           />
         </div>
+        <div className='flex place-content-end'>
+          <input
+            type='checkbox'
+            id='show-password'
+            onChange={(e) => {
+              pas1.current.type = e.target.checked ? 'text' : 'password';
+              pas2.current.type = e.target.checked ? 'text' : 'password';
+            }}
+          />
+          <label htmlFor='show-password' className='px-2 text-sm content-center'>
+            Show password
+          </label>
+        </div>
         <button
-          className='bg-gray-500 h-10 rounded-full my-7 bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold'
+          className='bg-gray-500 h-10 rounded-full my-4 bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold'
           onClick={handleRegister}>
           Register
         </button>

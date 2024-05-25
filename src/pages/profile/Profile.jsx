@@ -8,6 +8,7 @@ import { useAsync } from 'react-use';
 import EditProfile from './EditProfile.jsx';
 import Follow from '../../components/profile/Follow.jsx';
 import { ConfirmDialog } from 'primereact/confirmdialog';
+import ChangePassword from '../../components/profile/ChangePassword.jsx';
 
 export default function Profile() {
   const [username, setUsername] = useState('');
@@ -21,12 +22,14 @@ export default function Profile() {
   const [isFollowOpen, setIsFollowOpen] = useState(false);
   const navigate = useNavigate();
   const [followType, setFollowType] = useState('follower');
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const { isAuth, setLoading } = useContext(AppContext);
 
   useAsync(async () => {
     if (!isAuth) {
       return navigate('/login');
     }
+    if (isEditOpen) return;
     setLoading(true);
     try {
       const res = await instanceWToken.get('profile');
@@ -73,6 +76,7 @@ export default function Profile() {
         owner={true}
         setFollowType={setFollowType}
         setIsFollowOpen={setIsFollowOpen}
+        setIsChangePasswordOpen={setIsChangePasswordOpen}
       />
       {userId && <VideoBoard user_id={userId} />}
       <EditProfile
@@ -85,6 +89,7 @@ export default function Profile() {
       />
       <ConfirmDialog className='absolute z-[100]' />
       <Follow user_id={userId} isFollowOpen={isFollowOpen} setIsFollowOpen={setIsFollowOpen} followType={followType} />
+      <ChangePassword isChangePasswordOpen={isChangePasswordOpen} setIsChangePasswordOpen={setIsChangePasswordOpen} />
     </div>
   );
 }

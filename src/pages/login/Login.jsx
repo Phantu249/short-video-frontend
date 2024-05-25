@@ -10,6 +10,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const pass = useRef(null);
   const msgs = useRef(null);
   const validateUsername = (username) => {
     const re = /^[a-zA-Z][a-zA-Z0-9]{5,14}$/;
@@ -113,17 +114,31 @@ export default function Login() {
             type='password'
             name='password'
             id='password'
+            ref={pass}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder='Type your Password'
-            className='outline-none border-b-2 h-10 pr-2 pl-8 mb-5 w-full'
+            className='outline-none border-b-2 h-10 pr-2 pl-8 mb-2 w-full'
             required
           />
         </div>
 
+        <div className='flex place-content-end'>
+          <input
+            type='checkbox'
+            id='show-password'
+            onChange={(e) => {
+              pass.current.type = e.target.checked ? 'text' : 'password';
+            }}
+          />
+          <label htmlFor='show-password' className='px-2 text-sm content-center'>
+            Show password
+          </label>
+        </div>
+
         <button
           onClick={handleLoginClick}
-          className='bg-gray-500 h-10 rounded-full my-7 bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold'>
+          className='bg-gray-500 h-10 rounded-full my-4 bg-gradient-to-r from-violet-500 to-pink-500 text-white font-bold'>
           Login
         </button>
       </form>

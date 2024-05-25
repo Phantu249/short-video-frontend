@@ -1,13 +1,14 @@
 import ProfileButton from './ProfileButton.jsx';
-import { IoLogOutOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../App.jsx';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
+import { CgMenuRightAlt } from 'react-icons/cg';
 
 export default function UserBoard(props) {
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AppContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleLogout = async () => {
     try {
       const response = await instanceWToken.post('logout', {
@@ -54,9 +55,18 @@ export default function UserBoard(props) {
       <div className='m-2 font-bold w-full text-center text-lg h-[32px]'>
         {props.first_name} {props.last_name}
       </div>
-      <button className='absolute top-2 right-2' onClick={handleLogout}>
-        <IoLogOutOutline className='size-7' />
-      </button>
+      <div className='absolute top-3 right-3 cursor-pointer' onClick={() => setIsMenuOpen((prev) => !prev)}>
+        <CgMenuRightAlt className='size-7' />
+        <div
+          className={`absolute ${isMenuOpen ? 'm-active' : 'm-inactive'} bg-white w-32 flex flex-col gap-1 py-2 right-0 border-[1px] rounded-xl`}>
+          <div onClick={() => props.setIsChangePasswordOpen(true)} className=' hover:bg-gray-200 px-2 '>
+            Đổi mật khẩu
+          </div>
+          <div onClick={handleLogout} className=' hover:bg-gray-200 px-2 '>
+            Đăng xuất
+          </div>
+        </div>
+      </div>
       <img
         src={props.profile.profile_pic}
         alt='avt'

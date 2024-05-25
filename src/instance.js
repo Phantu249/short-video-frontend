@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-export const WS_URL = 'ws://' + '127.0.0.1:8000' + '/ws/';
+export const WS_URL = 'ws://' + '192.168.0.107:8000' + '/ws/';
 const BASE_URL = 'http://127.0.0.1:8000/api';
-const LOCAL_URL = 'http://192.168.137.1:8000/api';
+const LOCAL_URL = 'http://192.168.0.107:8000/api';
 const ZROK_URL = 'https://c20z3p74n0k2.share.zrok.io/api';
 
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_URL,
   headers: {
     'ngrok-skip-browser-warning': 'true',
     'Access-Control-Allow-Origin': '*',
@@ -14,7 +14,7 @@ const instance = axios.create({
 });
 
 export const instanceWToken = axios.create({
-  baseURL: BASE_URL,
+  baseURL: LOCAL_URL,
   headers: {
     'ngrok-skip-browser-warning': 'true',
     'Access-Control-Allow-Origin': '*',
@@ -48,7 +48,7 @@ instanceWToken.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response.status === 401 || error.response.status === 403) {
+    if (error.response.status === 401) {
       originalRequest._retry = true;
       try {
         const response = await instance.post('token/refresh', {

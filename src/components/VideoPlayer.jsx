@@ -13,6 +13,7 @@ export default function VideoPlayer() {
   const [position, setPosition] = useState([]);
   const [direction, setDirection] = useState(null);
   const [mouseDown, setMouseDown] = useState(false);
+  const [distance, setDistance] = useState(0);
   const { playingVideo, setPlayingVideo, videos, loadMore } = useContext(AppContext);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export default function VideoPlayer() {
     if (isCommentOpen) return;
     setPosition([e.clientX, e.clientY]);
     setMouseDown(true);
+    setDistance(0);
   };
 
   const handleMouseMove = (e) => {
@@ -56,6 +58,7 @@ export default function VideoPlayer() {
     if (!mouseDown) return;
     if (e.target.id === 'home-container' || e.target.id === 'video-player') {
       const curPosition = [e.clientX, e.clientY];
+      setDistance(curPosition[1] - position[1]);
       if (curPosition[1] - position[1] > 20) {
         setDirection('down');
       }

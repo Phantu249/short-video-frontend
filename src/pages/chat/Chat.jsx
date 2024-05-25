@@ -148,6 +148,7 @@ export default function Chat() {
             border-b-2
             font-semibold
             pl-12
+            cursor-pointer
             '>
         {ReceiverFirstname} {ReceiverLastName}
         <BackButton />

@@ -125,3 +125,17 @@ body * {
             orangered, yellow, greenyellow, limegreen, cornflowerblue, blueviolet, violet, indianred);
     animation: spin 4s linear infinite;
 }
+
+.m-active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: 0.1s ease-in-out;
+}
+
+.m-inactive {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9);
+    transition: 0.1s ease-in-out;
+}
