@@ -8,6 +8,7 @@ export default function Comment(props) {
                 h-fit
                 p-1
                 m-2
+                z-[4]
         '>
       <div
         className='
