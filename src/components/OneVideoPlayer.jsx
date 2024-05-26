@@ -67,7 +67,7 @@ export default function OneVideoPlayer() {
       onClick={handleClick}
       id='home-container'>
       <IoIosArrowBack
-        className='size-8 text-white drop-shadow-md shadow-black absolute top-4 left-3 z-[2]'
+        className='size-8 text-white drop-shadow-md shadow-black absolute top-4 left-3 z-[2] cursor-pointer'
         onClick={handleBackClick}
       />
       <video

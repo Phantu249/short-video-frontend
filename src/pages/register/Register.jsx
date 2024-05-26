@@ -3,7 +3,7 @@ import { FaRegUser } from 'react-icons/fa6';
 import { FiLock } from 'react-icons/fi';
 import { IoIosArrowBack } from 'react-icons/io';
 import instance from '../../instance.js';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Messages } from 'primereact/messages';
 
 export default function Register() {
@@ -14,6 +14,12 @@ export default function Register() {
   const msgs = useRef(null);
   const pas1 = useRef(null);
   const pas2 = useRef(null);
+
+  useEffect(() => {
+    if (!!localStorage.getItem('access_token')) {
+      navigate('/home');
+    }
+  }, []);
 
   const validateUsername = (username) => {
     const re = /^[a-zA-Z][a-zA-Z0-9]{5,14}$/;

@@ -2,7 +2,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import ProfileButton from './ProfileButton.jsx';
 import { Transition } from '@headlessui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { MessagesContext } from '../../App.jsx';
+import { AppContext, MessagesContext } from '../../App.jsx';
 import { instanceWToken } from '../../instance.js';
 
 export default function ChangePassword(props) {
@@ -10,6 +10,7 @@ export default function ChangePassword(props) {
   const [newPassword, setNewPassword] = useState('');
   const [reNewPassword, setReNewPassword] = useState('');
   const globalMessage = useContext(MessagesContext);
+  const { isMobile, isHidden } = useContext(AppContext);
   const pas1 = useRef(null);
   const pas2 = useRef(null);
 
@@ -109,8 +110,9 @@ export default function ChangePassword(props) {
       leave='transition-transform ease-in duration-200'
       leaveFrom='transform translate-x-0'
       leaveTo='transform translate-x-full'
-      className='
-            flex absolute top-0 left-0 w-full flex-grow flex-col overflow-y-hidden z-[10] h-full bg-white '>
+      className={`
+        flex absolute flex-grow flex-col overflow-y-hidden z-[10]  
+        ${isMobile ? 'bg-white top-0 left-0 w-full h-full' : isHidden ? 'bg-black top-16 right-0 bottom-0 left-[50px]' : 'bg-black top-16 right-0 bottom-0 left-[220px]'}`}>
       <div
         className='
             flex
@@ -123,14 +125,14 @@ export default function ChangePassword(props) {
         '>
         <div className='m-2 text-nm'>Đổi mật khẩu</div>
         <IoIosArrowBack
-          className='size-6 absolute top-2 left-2'
+          className='size-6 absolute top-2 left-2 cursor-pointer'
           onClick={(e) => {
             e.stopPropagation();
             props.setIsChangePasswordOpen(false);
           }}
         />
         <div className='flex w-full flex-col px-3 my-5 mt-10 items-center'>
-          <form className='flex w-full flex-col gap-2 mb-5'>
+          <form className={`flex ${isMobile ? 'w-full' : 'w-1/2 min-w-[400px]'} flex-col gap-2 mb-5`}>
             <div className='flex w-full flex-col '>
               <label htmlFor='firstname' className='px-2 font-semibold content-center'>
                 Mật khẩu cũ
@@ -142,7 +144,8 @@ export default function ChangePassword(props) {
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
             <div className='flex w-full flex-col'>
@@ -157,7 +160,8 @@ export default function ChangePassword(props) {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
             <div className='flex w-full flex-col'>
@@ -172,7 +176,8 @@ export default function ChangePassword(props) {
                 value={reNewPassword}
                 onChange={(e) => setReNewPassword(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
             <div className='flex place-content-end'>
@@ -189,7 +194,9 @@ export default function ChangePassword(props) {
               </label>
             </div>
           </form>
-          <ProfileButton onClick={handleChangePassword}>Lưu</ProfileButton>
+          <ProfileButton className={`${isMobile ? '' : 'bg-[#333333]'}`} onClick={handleChangePassword}>
+            Lưu
+          </ProfileButton>
         </div>
       </div>
     </Transition>

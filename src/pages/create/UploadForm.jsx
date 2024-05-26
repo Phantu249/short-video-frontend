@@ -10,7 +10,7 @@ export default function UploadForm(props) {
   const [file, setFile] = useState(null);
   const globalMessage = useContext(MessagesContext);
   const navigate = useNavigate();
-  const { setLoading, setReloadHome } = useContext(AppContext);
+  const { setLoading, setReloadHome, isMobile } = useContext(AppContext);
   const handleUpload = async () => {
     if (!file) return;
     setLoading(true);
@@ -35,6 +35,11 @@ export default function UploadForm(props) {
       }
     } catch (err) {
       console.log(err);
+      if (err.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
     setLoading(false);
   };
@@ -57,21 +62,21 @@ export default function UploadForm(props) {
       leave='transition-transform ease-in duration-200'
       leaveFrom='transform translate-y-0'
       leaveTo='transform translate-y-full'
-      className='
-            flex
-            absolute
-            top-0
-            left-0
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            z-[10]
-            h-full
-            bg-white
-            justify-center
-            items-center
-            '>
+      className={`
+        flex
+        absolute
+        top-0
+        left-0
+        w-full
+        flex-grow
+        flex-col
+        overflow-y-hidden
+        z-[10]
+        h-full
+        ${isMobile ? 'bg-white text-black' : 'bg-[#222222] text-white'}
+        justify-center
+        items-center
+        `}>
       <div className='font-bold mt-10 text-4xl'>Upload Video</div>
 
       <form onSubmit={(e) => e.preventDefault()} className='flex w-full flex-col h-fit max-w-96 p-5 gap-2'>
@@ -90,7 +95,7 @@ export default function UploadForm(props) {
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           name='description'
-          className='resize-none outline-none rounded-xl border-2 h-[10rem] w-full p-2'
+          className={`resize-none outline-none rounded-xl border-2 h-[10rem] w-full p-2 ${isMobile ? 'bg-white text-black' : 'bg-[#222222] text-white'}`}
         />
         <div className='w-full flex items-center my-5 z-[7] gap-2'>
           <button

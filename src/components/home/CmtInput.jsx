@@ -2,11 +2,13 @@ import { CiPaperplane } from 'react-icons/ci';
 import { useContext, useState } from 'react';
 import { instanceWToken } from '../../instance.js';
 import { AppContext, MessagesContext } from '../../App.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function CmtInput(props) {
   const [commentContent, setCommentContent] = useState('');
   const { isAuth } = useContext(AppContext);
   const globalMessage = useContext(MessagesContext);
+  const navigate = useNavigate();
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +43,11 @@ export default function CmtInput(props) {
       }
     } catch (error) {
       console.error(error);
+      if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
   };
   return (

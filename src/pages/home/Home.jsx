@@ -21,7 +21,7 @@ const Home = () => {
             z-[1]
             h-full'>
       <Header />
-      {videos.length > 0 && <VideoSwiper />}
+      {videos?.length > 0 && <VideoSwiper />}
     </div>
   );
 };

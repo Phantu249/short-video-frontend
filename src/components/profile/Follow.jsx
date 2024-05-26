@@ -13,6 +13,7 @@ export default function Follow(props) {
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
   const { setLoading, setIsSearching } = useContext(AppContext);
+  const { isMobile, isHidden } = useContext(AppContext);
 
   const debounce = useDebounce(searchContent, 500);
 
@@ -41,7 +42,7 @@ export default function Follow(props) {
   }, [props.isFollowOpen, debounce]);
 
   const search = async () => {
-    if (searchContent === '' || searchContent.trim() === '') return;
+    if (!searchContent.trim()) return;
     setLoading(true);
     try {
       const res = await instanceWToken(`getfollows?q=${encodeURIComponent(searchContent)}&type=${props.followType}`);
@@ -74,30 +75,20 @@ export default function Follow(props) {
       leave='transition-transform ease-in duration-200'
       leaveFrom='transform translate-x-0'
       leaveTo='transform translate-x-full'
-      className='
-            flex
-            absolute
-            top-0
-            left-0
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            z-[10]
-            h-full
-            bg-white
-            '>
+      className={` flex absolute top-0 left-0 w-full h-full flex-col z-[10] 
+                  ${isMobile ? 'bg-white' : ' bg-black text-white'}`}>
       <div
-        className='
-            flex
-            flex-col
-            w-full
-            h-fit
-            items-center
-            relative
-        '>
+        className={`
+          flex
+          flex-col
+          w-full
+          h-fit
+          items-center
+          relative
+          ${isHidden ? '' : 'pb-14'}
+          `}>
         <IoIosArrowBack
-          className='size-6 absolute top-5 left-1'
+          className='size-6 absolute top-5 left-1 cursor-pointer'
           onClick={(e) => {
             e.stopPropagation();
             setSearchResult([]);
@@ -106,9 +97,12 @@ export default function Follow(props) {
           }}
         />
       </div>
-      <div className='pl-10 border-b-2'>
-        <SearchBox searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
-      </div>
+      {isHidden && (
+        <div className={`pl-10 border-b-[1px] ${isMobile ? '' : 'border-[#444444]'}`}>
+          <SearchBox searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
+        </div>
+      )}
+
       {searchResult.length > 0 && <SearchResult results={searchResult} field='user' />}
     </Transition>
   );

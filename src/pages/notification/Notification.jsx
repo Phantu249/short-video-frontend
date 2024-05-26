@@ -5,13 +5,13 @@ import { instanceWToken } from '../../instance.js';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
-import ChatSearch from './ChatSearch.jsx';
+import ChatSearch from '../../components/notification/ChatSearch.jsx';
 
 export default function Notification() {
   const { isAuth } = useContext(AppContext);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
-  const { hasNotif, setHasNotif } = useContext(AppContext);
+  const { hasNotif, setHasNotif, isHidden, isMobile } = useContext(AppContext);
   const [isChatSearchOpen, setIsChatSearchOpen] = useState(false);
 
   useAsync(async () => {
@@ -27,6 +27,11 @@ export default function Notification() {
         }
       } catch (error) {
         console.log(error);
+        if (error.response.status === 401) {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          navigate('/login');
+        }
       }
       setHasNotif(false);
     }
@@ -43,24 +48,19 @@ export default function Notification() {
         setDatas(res.data);
       }
     } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
       console.log(error);
     }
   }, []);
 
   return (
     <div
-      className='
-            flex
-            relative
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            justify-center
-            z-[1]
-            bg-white
-            h-full
-    '>
+      className={` flex relative w-full flex-grow flex-col overflow-y-hidden justify-center z-[1] h-full 
+                  ${isMobile ? 'bg-white' : 'bg-black text-white'} `}>
       <div
         className='
             w-full
@@ -72,13 +72,15 @@ export default function Notification() {
             flex-none
             '>
         Tin nhắn
-        <HiOutlineSearch
-          className='absolute right-2 top-2 size-6 cursor-pointer'
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsChatSearchOpen(true);
-          }}
-        />
+        {isHidden && (
+          <HiOutlineSearch
+            className='absolute right-2 top-2 size-6 cursor-pointer'
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsChatSearchOpen(true);
+            }}
+          />
+        )}
       </div>
       <ChatSearch isChatSearchOpen={isChatSearchOpen} setIsChatSearchOpen={setIsChatSearchOpen} />
       <div

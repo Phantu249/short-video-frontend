@@ -1,4 +1,4 @@
-import ProfileButton from '../../components/profile/ProfileButton.jsx';
+import ProfileButton from './ProfileButton.jsx';
 import { IoCameraOutline } from 'react-icons/io5';
 import { Transition } from '@headlessui/react';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -9,7 +9,7 @@ import { AppContext } from '../../App.jsx';
 export default function EditProfile(props) {
   const [editFName, setEditFName] = useState('');
   const [editLName, setEditLName] = useState('');
-  const { setLoading } = useContext(AppContext);
+  const { setLoading, isMobile } = useContext(AppContext);
 
   const [editBio, setEditBio] = useState('');
   const [file, setFile] = useState(null);
@@ -73,19 +73,8 @@ export default function EditProfile(props) {
       leave='transition-transform ease-in duration-200'
       leaveFrom='transform translate-x-0'
       leaveTo='transform translate-x-full'
-      className='
-            flex
-            absolute
-            top-0
-            left-0
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            z-[10]
-            h-full
-            bg-white
-            '>
+      className={` flex absolute top-0 left-0 w-full h-full flex-col z-[10] 
+                  ${isMobile ? 'bg-white' : ' bg-black text-white'}`}>
       <div
         className='
             flex
@@ -93,12 +82,11 @@ export default function EditProfile(props) {
             w-full
             h-full
             items-center
-            border-b-2
             relative
         '>
         <div className='m-2 font-bold'>Sửa Hồ sơ</div>
         <IoIosArrowBack
-          className='size-6 absolute top-2 left-2'
+          className='size-6 absolute top-2 left-2 cursor-pointer'
           onClick={(e) => {
             e.stopPropagation();
             props.setIsEditOpen(false);
@@ -121,7 +109,7 @@ export default function EditProfile(props) {
             object-cover
             rounded-full
             border-4
-            border-black
+            border-[#444444]
             '
           />
           <div
@@ -142,7 +130,7 @@ export default function EditProfile(props) {
 
         <div className='text-sm'>Thay đổi ảnh</div>
         <div className='flex w-full flex-col px-3 my-5 mt-10 items-center'>
-          <form className='flex w-full flex-col gap-2 mb-5'>
+          <form className={`flex ${isMobile ? 'w-full' : 'w-1/2 min-w-[400px]'} flex-col gap-2 mb-5`}>
             <div className='flex w-full '>
               <label htmlFor='firstname' className='px-2 font-bold content-center'>
                 Tên
@@ -155,7 +143,8 @@ export default function EditProfile(props) {
                 value={editFName}
                 onChange={(e) => setEditFName(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
             <div className='flex w-full '>
@@ -170,7 +159,8 @@ export default function EditProfile(props) {
                 value={editLName}
                 onChange={(e) => setEditLName(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
             <div className='flex w-full '>
@@ -185,11 +175,14 @@ export default function EditProfile(props) {
                 value={editBio}
                 onChange={(e) => setEditBio(e.target.value)}
                 autoComplete='off'
-                className='outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2'
+                className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
+                  ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
             </div>
           </form>
-          <ProfileButton onClick={handleSaveProfileClick}>Lưu</ProfileButton>
+          <ProfileButton className={`${isMobile ? '' : 'bg-[#333333]'}`} onClick={handleSaveProfileClick}>
+            Lưu
+          </ProfileButton>
         </div>
       </div>
     </Transition>

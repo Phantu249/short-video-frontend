@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { instanceWToken } from '../../instance.js';
-import { MessagesContext } from '../../App.jsx';
+import { AppContext, MessagesContext } from '../../App.jsx';
 import { useContext } from 'react';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { TiDelete } from 'react-icons/ti';
@@ -8,6 +8,7 @@ import { TiDelete } from 'react-icons/ti';
 export default function Video(props) {
   const navigate = useNavigate();
   const globalMessage = useContext(MessagesContext);
+  const { setReloadHome } = useContext(AppContext);
   const handleVideoClick = (e) => {
     e.stopPropagation();
     navigate(`/video/${props.video.id}`);
@@ -19,6 +20,7 @@ export default function Video(props) {
       const response = await instanceWToken.delete(`video/${encodeURIComponent(props.video.id)}`);
       if (response.status === 200) {
         props.handleDel(props.video.id);
+        setReloadHome(true);
         globalMessage.current.show([
           {
             severity: 'success',
@@ -29,6 +31,11 @@ export default function Video(props) {
       }
     } catch (error) {
       console.error(error);
+      if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
   };
 
@@ -45,34 +52,8 @@ export default function Video(props) {
     });
   };
 
-  // const handleDelVideoClick = async (e) => {
-  //   e.stopPropagation();
-  //   try {
-  //     const response = await instanceWToken.delete(`video/${encodeURIComponent(props.video.id)}`);
-  //     if (response.status === 200) {
-  //       props.handleDel(props.video.id);
-  //       globalMessage.current.show([
-  //         {
-  //           severity: 'success',
-  //           detail: 'Delete success',
-  //           closable: true,
-  //         },
-  //       ]);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   return (
-    <div
-      className='
-            relative
-            w-1/3
-            h-1/2
-            min-h-52
-            max-h-96
-            p-[1px]
-    '>
+    <div className={` relative w-1/3 h-1/2 min-h-52 max-h-96 p-[1px] lg:w-1/4 lg:p-[2px] xl:w-1/5 xl:p-[2px]`}>
       {props.board === 'userVideo' && (
         <TiDelete
           onClick={showConfirm}
@@ -80,12 +61,7 @@ export default function Video(props) {
         />
       )}
       <img
-        className='
-            w-full
-            h-full
-            object-cover
-            bg-gray-500
-      '
+        className=' w-full h-full rounded object-cover bg-gray-500'
         loading={'lazy'}
         src={props.video.thumbnail}
         alt='videoAlt'

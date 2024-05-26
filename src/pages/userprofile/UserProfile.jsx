@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../App.jsx';
 import { useAsync } from 'react-use';
 import instance from '../../instance.js';
-import UserBoardNotOwner from './UserBoardNotOwner.jsx';
-import VideoBoardNotOwner from './VideoBoardNotOwner.jsx';
+import UserBoardNotOwner from '../../components/userprofile/UserBoardNotOwner.jsx';
+import VideoBoardNotOwner from '../../components/userprofile/VideoBoardNotOwner.jsx';
 import BackButton from '../../components/BackButton.jsx';
 
 export default function UserProfile() {
@@ -15,7 +15,7 @@ export default function UserProfile() {
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
   const navigate = useNavigate();
-  const { isAuth, userId } = useContext(AppContext);
+  const { isAuth, userId, isMobile } = useContext(AppContext);
   const id = useParams().pk;
 
   useEffect(() => {
@@ -45,15 +45,8 @@ export default function UserProfile() {
   }, []);
   return (
     <div
-      className='
-            flex
-            relative
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            z-[1]
-            h-full'>
+      className={`flex relative flex-grow flex-col z-[1]
+                    ${isMobile ? 'w-full overflow-y-hidden' : 'overflow-y-auto bg-black text-white'}`}>
       <BackButton />
       <UserBoardNotOwner
         user_id={id}

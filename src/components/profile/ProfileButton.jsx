@@ -1,11 +1,11 @@
 export default function ProfileButton(props) {
   return (
     <button
-      className='
+      className={`
         bg-gray-200
         w-24
         h-9
-        rounded-md'
+        rounded-md ${props.className}`}
       onClick={props.onClick}>
       {props.children}
     </button>

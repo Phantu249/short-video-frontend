@@ -4,7 +4,7 @@ import { useContext } from 'react';
 
 export default function Message(props) {
   const navigate = useNavigate();
-  const { userId } = useContext(AppContext);
+  const { userId, isHidden, isMobile } = useContext(AppContext);
 
   function formatTimeAgo(timestamp) {
     const time = new Date(timestamp);
@@ -35,16 +35,7 @@ export default function Message(props) {
   return (
     <div
       onClick={handleMsgClick}
-      className='
-            flex
-            flex-none
-            w-full
-            h-20
-            items-center
-            bg-gray-100
-            rounded-xl
-            cursor-pointer
-    '>
+      className={` flex flex-none w-full h-20 items-center rounded-xl cursor-pointer ${isMobile ? 'bg-gray-100 ' : 'bg-[#333333]'} `}>
       <img
         src={`${props.data.profile_pic}`}
         alt='avt-pic'
@@ -78,8 +69,10 @@ export default function Message(props) {
           <div className='text-sm w-full h-10 overflow-hidden text-gray-500'>{props.data.msg}</div>
         ) : props.data.is_read ? (
           <div className='text-sm w-full h-10 overflow-hidden text-gray-500'>{props.data.msg}</div>
-        ) : (
+        ) : isMobile ? (
           <div className='text-sm w-full h-10 overflow-hidden text-black font-semibold '>{props.data.msg}</div>
+        ) : (
+          <div className='text-sm w-full h-10 overflow-hidden text-white font-semibold '>{props.data.msg}</div>
         )}
       </div>
     </div>

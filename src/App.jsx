@@ -8,8 +8,11 @@ import { jwtDecode } from 'jwt-decode';
 import useWebSocket from 'react-use-websocket';
 import instance, { instanceWToken, WS_URL } from './instance.js';
 import { useAsync } from 'react-use';
+import { useMediaQuery } from 'react-responsive';
+import HeaderDesktop from './components/desktop_component/HeaderDesktop.jsx';
+import NavBarDesktop from './components/desktop_component/NavBarDesktop.jsx';
 
-export const AppContext = createContext();
+export const AppContext = createContext({});
 export const MessagesContext = createContext();
 
 function App() {
@@ -29,7 +32,18 @@ function App() {
   const [playingVideo, setPlayingVideo] = useState(0);
   const [reloadHome, setReloadHome] = useState(true);
 
-  useAsync(async () => {
+  const [username, setUsername] = useState('');
+  const [profile, setProfile] = useState({});
+  const [follow, setFollow] = useState({});
+  const [likeCount, setLikeCount] = useState(0);
+  const [first_name, setFirst_name] = useState('');
+  const [last_name, setLast_name] = useState('');
+  const [reloadProfile, setReloadProfile] = useState(true);
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const isHidden = useMediaQuery({ query: '(max-width: 860px)' });
+
+  useEffect(() => {
     if (!localStorage.getItem('access_token')) {
       return;
     }
@@ -38,15 +52,6 @@ function App() {
       setUserId(payload.user_id);
       setIsAuth(!!localStorage.getItem('access_token'));
       setSocketUrl(`${WS_URL}notification/${payload.user_id}?token=${localStorage.getItem('access_token')}`);
-
-      // try {
-      //   const ticket = await instanceWToken.get('getticket');
-      //   if (ticket.status === 200) {
-      //     setSocketUrl(`${WS_URL}notification/${payload.user_id}?uuid=${ticket.data.uuid}`);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
     } catch (error) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
@@ -54,18 +59,37 @@ function App() {
     }
   }, [localStorage.getItem('access_token')]);
 
-  // const reConnect = async () => {
-  //   setSocketUrl(null);
-  //
-  //   try {
-  //     const ticket = await instanceWToken.get('getticket');
-  //     if (ticket.status === 200) {
-  //       setSocketUrl(`${WS_URL}notification/${userId}?uuid=${ticket.data.uuid}`);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  useAsync(async () => {
+    if (!isAuth) {
+      return;
+    }
+    if (!reloadProfile) return;
+    setLoading(true);
+    try {
+      const res = await instanceWToken.get('profile');
+      if (res.status === 200) {
+        setLoading(false);
+
+        const { user_id, profile, follower, following, username, first_name, last_name, like_count } = res.data;
+        setUsername(username);
+        setProfile(profile);
+        setFollow({ follower, following });
+        setLikeCount(like_count);
+        setFirst_name(first_name);
+        setLast_name(last_name);
+        setUserId(user_id);
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      if (err.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
+    }
+    setLoading(false);
+  }, [isAuth, reloadProfile]);
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: (closeEvent) => {
@@ -92,7 +116,6 @@ function App() {
       ]);
     }
   }, [lastJsonMessage]);
-
   useAsync(async () => {
     if (!reloadHome) return;
     console.log('reload home');
@@ -112,6 +135,20 @@ function App() {
           setWatched(arr);
         }
       } else {
+        console.log('not auth');
+        if (homeState === 'follow') {
+          setLoading(false);
+          setPlayingVideo(0);
+          setReloadHome(false);
+          globalMessage.current.show([
+            {
+              severity: 'error',
+              detail: 'You need to login',
+              closable: true,
+            },
+          ]);
+          return;
+        }
         const response = await instance.post(`videorecommend`, data);
         if (response.status === 200) {
           setVideos(response.data);
@@ -123,7 +160,9 @@ function App() {
       console.log(error);
       setLoading(false);
       if (error.response.status === 401) {
-        return navigate('/login');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
       }
     }
     setLoading(false);
@@ -155,13 +194,17 @@ function App() {
     } catch (error) {
       console.log(error);
       if (error.response.status === 401) {
-        return navigate('/login');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
       }
     }
   };
   return (
     <AppContext.Provider
       value={{
+        isMobile,
+        isHidden,
         isAuth,
         setIsAuth,
         setLoading,
@@ -181,13 +224,20 @@ function App() {
         setReloadHome,
         reloadHome,
         loadMore,
+        username,
+        profile,
+        follow,
+        likeCount,
+        first_name,
+        last_name,
+        setReloadProfile,
       }}>
       <div className='flex justify-center items-center'>
         <Messages ref={globalMessage} className='globalMessage' />
       </div>
       <MessagesContext.Provider value={globalMessage}>
         <div className='relative h-dvh w-screen flex flex-col'>
-          {loading ? (
+          {loading && (
             <ReactLoading
               className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                         p-2 rounded-2xl bg-gray-500 bg-opacity-80 z-[100]'
@@ -196,11 +246,22 @@ function App() {
               width={80}
               height={80}
             />
-          ) : (
-            ''
           )}
-          <Outlet />
-          <NavBar setPage={setPage} />
+          {!isMobile && (
+            <>
+              <HeaderDesktop />
+              <div className='flex relative w-full flex-grow flex-row overflow-y-hidden z-[1] h-full'>
+                <NavBarDesktop setPage={setPage} />
+                <Outlet />
+              </div>
+            </>
+          )}
+          {isMobile && (
+            <>
+              <Outlet />
+              <NavBar setPage={setPage} />
+            </>
+          )}
         </div>
       </MessagesContext.Provider>
     </AppContext.Provider>

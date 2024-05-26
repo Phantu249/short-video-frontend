@@ -26,6 +26,11 @@ export default function ActionButtonContainer(props) {
       }
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
   }, [props.video]);
 
@@ -58,6 +63,11 @@ export default function ActionButtonContainer(props) {
       }
     } catch (error) {
       console.log(error);
+      if (error.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
   };
 

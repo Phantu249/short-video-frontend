@@ -5,7 +5,7 @@ import { instanceWToken } from '../../instance.js';
 
 export default function FollowButton(props) {
   const [isFollowing, setIsFollowing] = useState(false);
-  const { isAuth } = useContext(AppContext);
+  const { isAuth, isMobile } = useContext(AppContext);
   const globalMessage = useContext(MessagesContext);
 
   useAsync(async () => {
@@ -21,6 +21,11 @@ export default function FollowButton(props) {
       }
     } catch (e) {
       console.log(e);
+      if (e.response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        navigate('/login');
+      }
     }
   }, []);
   const handleFollowClick = async (e) => {
@@ -54,7 +59,7 @@ export default function FollowButton(props) {
             items-center
             w-24
             h-9
-            ${isFollowing ? 'bg-gray-200 text-black text-sm' : 'bg-red-500 text-white'}
+            ${isMobile ? (isFollowing ? 'bg-gray-200 text-black text-sm' : 'bg-red-500 text-white') : isFollowing ? 'text-sm header-search bg-[#333333]' : 'bg-red-500 text-white'}
             rounded-md
             p-1
             z-[10]

@@ -5,41 +5,16 @@ import { useContext } from 'react';
 import { AppContext } from '../../App.jsx';
 
 export default function SearchBox(props) {
-  const { isSearching } = useContext(AppContext);
+  const { isSearching, isMobile } = useContext(AppContext);
   return (
     <div
-      className='
-            flex
-            w-full
-            flex-none
-            h-16
-            justify-centerS
-            items-center'>
-      <form
-        className='
-            h-full
-            w-full
-            flex
-            flex-none
-            justify-center
-            items-center'>
-        <div
-          className='
-            relative
-            w-[75%]
-            h-full
-            flex
-            justify-center
-            items-center'>
+      className={`flex w-full flex-none h-16 justify-center items-center
+                    ${isMobile ? '' : 'header-search'}`}>
+      <form className={`h-full w-full flex flex-none justify-center items-center ${isMobile ? '' : 'header-search'}`}>
+        <div className={`relative w-[75%] h-full flex justify-center items-center ${isMobile ? '' : 'header-search'}`}>
           <input
-            className='
-                w-[100%]
-                h-[60%]
-                rounded-xl
-                bg-gray-200
-                p-3
-                px-8
-                outline-0'
+            className={` w-[100%] h-[60%] p-3 px-8 outline-0
+                        ${!isMobile ? 'header-search-input rounded-full bg-[#444444]' : 'rounded-xl bg-gray-200'}`}
             autoComplete='off'
             type='text'
             id='cmt-input'
@@ -48,16 +23,17 @@ export default function SearchBox(props) {
             onChange={(e) => props.setSearchContent(e.target.value)}
           />
 
-          <HiOutlineSearch className='absolute left-1 size-6' />
+          <HiOutlineSearch className={`absolute left-1 size-6 ${isMobile ? '' : 'header-search'}`} />
           <IoIosCloseCircle
             onClick={(e) => {
               e.stopPropagation();
               props.setSearchContent('');
             }}
-            className={` right-3 size-4 text-gray-600 ${props.searchContent !== '' && props.searchContent.trim() !== '' && !isSearching ? 'absolute' : 'hidden'}`}
+            className={` right-3 size-4 text-gray-600 ${isMobile ? '' : 'header-search text-white'}
+                        ${props.searchContent !== '' && props.searchContent.trim() !== '' && !isSearching ? 'absolute' : 'hidden'}`}
           />
           <RiLoader2Fill
-            className={`animate-spin right-3 size-4 text-gray-600 ${isSearching ? 'absolute' : 'hidden'}`}
+            className={`animate-spin right-3 size-4 text-gray-600 ${isMobile ? '' : 'header-search text-white'} ${isSearching ? 'absolute' : 'hidden'}`}
           />
         </div>
         <button

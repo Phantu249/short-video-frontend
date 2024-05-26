@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaRegUser } from 'react-icons/fa6';
 import { FiLock } from 'react-icons/fi';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import instance from '../../instance.js';
 import { Messages } from 'primereact/messages';
 
@@ -12,6 +12,12 @@ export default function Login() {
   const navigate = useNavigate();
   const pass = useRef(null);
   const msgs = useRef(null);
+
+  useEffect(() => {
+    if (!!localStorage.getItem('access_token')) {
+      navigate('/home');
+    }
+  }, []);
   const validateUsername = (username) => {
     const re = /^[a-zA-Z][a-zA-Z0-9]{5,14}$/;
     if (!re.test(username)) {

@@ -18,21 +18,10 @@ export default function Chat() {
   const [isFetching, setIsFetching] = useState(false);
 
   const [socketURL, setSocketURL] = useState(null);
-  const { userId } = useContext(AppContext);
+  const { userId, isHidden, isMobile } = useContext(AppContext);
   const receiverId = useParams().pk;
 
   useAsync(async () => {
-    // try {
-    //   const ticket = await instanceWToken.get('getticket');
-    //   if (ticket.status === 200) {
-    //     setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?uuid=${ticket.data.uuid}`);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   if (err.response.status === 401) {
-    //     return navigate('/login');
-    //   }
-    // }
     setIsFetching(true);
 
     if (userId) setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?token=${localStorage.getItem('access_token')}`);
@@ -126,30 +115,22 @@ export default function Chat() {
 
   return (
     <div
-      className='
-            flex
-            relative
-            w-full
-            flex-grow
-            flex-col
-            overflow-y-hidden
-            bg-white
-            z-[1]
-            h-full'>
+      className={` flex relative w-full flex-grow flex-col overflow-y-hidden  ${isMobile ? 'bg-white' : 'bg-black text-white'}  z-[1] h-full`}>
       <div
         onClick={handleUserClick}
-        className='
-            w-full
-            h-12
-            flex
-            items-center
-            z-[10]
-            flex-none
-            border-b-2
-            font-semibold
-            pl-12
-            cursor-pointer
-            '>
+        className={`
+          w-full
+          h-12
+          flex
+          items-center
+          z-[10]
+          flex-none
+          border-b-[1px]
+          ${isMobile ? '' : 'border-[#333333]'}
+          font-semibold
+          pl-12
+          cursor-pointer
+          `}>
         {ReceiverFirstname} {ReceiverLastName}
         <BackButton />
       </div>
@@ -163,12 +144,14 @@ export default function Chat() {
         name={ReceiverFirstname}
       />
       <div
-        className='
-            flex
-            flex-none
-            w-full
-            h-14
-            border-t-2'>
+        className={`
+          flex
+          flex-none
+          w-full
+          h-14
+          border-t-[1px]
+          ${isMobile ? '' : 'border-[#333333]'}
+          `}>
         <form
           onSubmit={(e) => e.preventDefault()}
           className='
@@ -179,13 +162,14 @@ export default function Chat() {
             items-center
             px-3'>
           <input
-            className='
-                w-[85%]
-                h-[60%]
-                rounded-3xl
-                bg-gray-200
-                p-3
-                outline-0'
+            className={`
+              w-[85%]
+              h-[60%]
+              rounded-3xl
+              
+              p-3
+              ${isMobile ? 'bg-gray-200' : 'bg-[#333333]'}
+              outline-0`}
             autoComplete='off'
             value={messageContent}
             onChange={(e) => setMessageContent(e.target.value)}
