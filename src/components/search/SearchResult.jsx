@@ -9,9 +9,9 @@ export default function SearchResult(props) {
     <div
       className={`
         flex
-        flex-wrap
-        w-full
         h-fit
+        ${isMobile ? 'bg-white text-back flex-wrap' : props.field === 'user' ? 'bg-black text-white flex-col justify-center items-center gap-1' : 'bg-black text-white flex-wrap'}
+        w-full
         overflow-y-auto
         rounded-xl`}>
       {props.results.map((result, index) =>

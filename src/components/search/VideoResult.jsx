@@ -10,30 +10,31 @@ export default function VideoResult(props) {
     navigate(`/video/${props.video.id}`);
   };
   return (
-    <button
-      className={`
+    <div className={` w-1/2 h-96 p-[2px] lg:w-1/3 xl:w-1/4 rounded-lg `}>
+      <button
+        className={`
           flex
           flex-col
           flex-none
-          w-1/2
-          h-96
-          p-2
-          lg:w-1/3 xl:w-1/4
+          w-full
+          h-full
+          rounded-lg
+          p-1
           ${isMobile ? 'bg-gray-100' : 'bg-[#222222]'}
           `}
-      onClick={handleVideoClick}>
-      <img
-        src={props.video.thumbnail}
-        alt='search_pic'
-        className={`
+        onClick={handleVideoClick}>
+        <img
+          src={props.video.thumbnail}
+          alt='search_pic'
+          className={`
                 w-full
                 h-[88%]
                 object-cover
                 rounded
                 `}
-      />
-      <div
-        className='
+        />
+        <div
+          className='
             flex
             flex-grow
             flex-none
@@ -43,10 +44,10 @@ export default function VideoResult(props) {
             text-sm
             text-start
             pl-1'>
-        {props.video.description}
-      </div>
-      <div
-        className='
+          {props.video.description}
+        </div>
+        <div
+          className='
             flex
             flex-grow
             flex-none
@@ -55,8 +56,9 @@ export default function VideoResult(props) {
             overflow-hidden
             font-bold
             pl-1'>
-        {props.video.full_name}
-      </div>
-    </button>
+          {props.video.full_name}
+        </div>
+      </button>
+    </div>
   );
 }

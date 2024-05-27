@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import CommentContainer from './home/CommentContainer.jsx';
 
 export default function VideoSwiper() {
-  const { playingVideo, setPlayingVideo, videos, loadMore } = useContext(AppContext);
+  const { playingVideo, setPlayingVideo, videos, loadMore, isHidden } = useContext(AppContext);
   const [playing, setPlaying] = useState(0);
   const [direction, setDirection] = useState(null);
   const arr = new Array(videos.length > 3 ? 3 : videos.length).fill(0);
@@ -35,18 +35,18 @@ export default function VideoSwiper() {
     setPlaying(swiper.realIndex);
   };
   return (
-    <div className='w-full z-[1] h-full'>
+    <div className='flex w-full z-[1] h-full overflow-hidden'>
       <Swiper
         allowSlideNext={playingVideo < videos.length - 1 && !isCommentOpen}
         allowSlidePrev={playingVideo > 0 && !isCommentOpen}
         onSlideChange={handleSlideChange}
-        className=' w-full h-full'
+        className='flex flex-col flex-grow w-full h-full'
         direction={'vertical'}
         loop={true}>
         {arr.length > 0
           ? arr.map((video, idx) => {
               return (
-                <SwiperSlide key={idx} className='h-full'>
+                <SwiperSlide key={idx} className={`h-full ${isHidden ? '' : 'p-5'}`}>
                   <Video4Swipe
                     isCommentOpen={isCommentOpen}
                     setIsCommentOpen={setIsCommentOpen}

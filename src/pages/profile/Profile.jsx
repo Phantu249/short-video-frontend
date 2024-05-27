@@ -29,7 +29,7 @@ export default function Profile() {
 
   return (
     <div
-      className={`flex relative flex-grow flex-col z-[1] 
+      className={`flex relative flex-grow flex-col z-[1] overflow-x-hidden
                     ${isMobile ? 'w-full overflow-y-hidden' : 'overflow-y-auto bg-black text-white'}
                     ${isEditOpen || isFollowOpen || isChangePasswordOpen ? 'overflow-y-hidden' : ''}`}>
       <UserBoard

@@ -73,7 +73,7 @@ export default function ActionButtonContainer(props) {
 
   const handleClickCmt = (e) => {
     e.stopPropagation();
-    props.setIsCommentOpen(true);
+    props.setIsCommentOpen((prev) => !prev);
   };
 
   const handleClickShare = (e) => {
@@ -105,9 +105,8 @@ export default function ActionButtonContainer(props) {
             right-0
             h-3/5
             min-h-72
-            w-1/4
             z-[3]
-            p-3
+            p-5
             flex
             flex-col
             justify-between

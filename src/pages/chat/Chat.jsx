@@ -8,7 +8,7 @@ import { useAsync } from 'react-use';
 import { AppContext } from '../../App.jsx';
 import useWebSocket from 'react-use-websocket';
 
-export default function Chat() {
+export default function Chat(props) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [messageContent, setMessageContent] = useState('');
@@ -19,9 +19,14 @@ export default function Chat() {
 
   const [socketURL, setSocketURL] = useState(null);
   const { userId, isHidden, isMobile } = useContext(AppContext);
-  const receiverId = useParams().pk;
+  const [receiverId, setReceiverId] = useState(useParams().pk);
+
+  useEffect(() => {
+    if (props.chooseId) setReceiverId(props.chooseId);
+  }, [isHidden, props.chooseId]);
 
   useAsync(async () => {
+    if (!receiverId) return;
     setIsFetching(true);
 
     if (userId) setSocketURL(`${WS_URL}chat/${userId}/${receiverId}?token=${localStorage.getItem('access_token')}`);
@@ -53,7 +58,7 @@ export default function Chat() {
       }
     }
     setIsFetching(false);
-  }, [userId]);
+  }, [userId, receiverId]);
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(socketURL, {
     retryOnError: true,
@@ -79,6 +84,7 @@ export default function Chat() {
   const handleSendMessage = async (e) => {
     e.stopPropagation();
     e.preventDefault();
+    if (!receiverId) return;
     if (messageContent === '' || messageContent.trim() === '') return;
     const data = {
       action: 'send_message',
@@ -86,9 +92,11 @@ export default function Chat() {
     };
     sendJsonMessage(data);
     setMessageContent('');
+    if (!isHidden) props.setReloadMs(true);
   };
 
   const handleUserClick = () => {
+    if (!receiverId) return;
     navigate(`/user/${receiverId}`);
   };
 
@@ -132,7 +140,7 @@ export default function Chat() {
           cursor-pointer
           `}>
         {ReceiverFirstname} {ReceiverLastName}
-        <BackButton />
+        {isHidden && <BackButton />}
       </div>
       <MessageContainer
         isFetching={isFetching}

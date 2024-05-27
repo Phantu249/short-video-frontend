@@ -16,8 +16,8 @@ export default function UserResult(props) {
           flex
           flex-none
           w-full
+          ${!isMobile ? 'max-w-[600px] bg-[#222222] rounded-lg' : 'w-full'}
           h-20
-          ${isMobile ? 'bg-white text-back' : 'bg-black text-white'}
           place-content-between
           cursor-pointer
           p-2`}>

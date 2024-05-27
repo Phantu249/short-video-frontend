@@ -37,7 +37,7 @@ export default function HeaderSearch() {
   const search = async () => {
     if (!searchContent.trim()) return;
     setSearchResult([]);
-    navigate(`/search/${encodeURIComponent(searchContent)}`);
+    navigate(`/search/${encodeURIComponent(searchContent.trim())}`);
     // setLoading(true);
     // try {
     //   const res = await instance(`search?q=${encodeURIComponent(searchContent)}&type=user`);
@@ -85,7 +85,7 @@ export default function HeaderSearch() {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`header-search-box z-[10] relative flex flex-col w-[40%] max-w-[600px] h-full`}>
+      className={`header-search-box z-[11] relative flex flex-col w-[40%] max-w-[600px] h-full`}>
       <SearchBox isHeader={true} searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
       {searchResult.length > 0 && <HeaderSearchResult results={searchResult} />}
     </div>

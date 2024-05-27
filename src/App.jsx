@@ -233,7 +233,7 @@ function App() {
         setReloadProfile,
       }}>
       <div className='flex justify-center items-center'>
-        <Messages ref={globalMessage} className='globalMessage' />
+        <Messages ref={globalMessage} className='globalMessage z-[100]' />
       </div>
       <MessagesContext.Provider value={globalMessage}>
         <div className='relative h-dvh w-screen flex flex-col'>

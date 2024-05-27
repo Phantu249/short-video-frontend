@@ -57,35 +57,43 @@ export default function OneVideoPlayer() {
             relative
             w-full
             flex-grow
+            overflow-hidden
+            bg-black
+            z-[1]
+            h-full'>
+      <div
+        className='
+            flex
+            relative
+            flex-grow
             overflow-y-hidden
             justify-center
             items-center
             z-[1]
             bg-black
-            h-full
-        '
-      onClick={handleClick}
-      id='home-container'>
-      <IoIosArrowBack
-        className='size-8 text-white drop-shadow-md shadow-black absolute top-4 left-3 z-[2] cursor-pointer'
-        onClick={handleBackClick}
-      />
-      <video
-        loop
-        autoPlay
-        className='
+            h-full'
+        onClick={handleClick}
+        id='home-container'>
+        <IoIosArrowBack
+          className='size-8 text-white drop-shadow-md shadow-black absolute top-4 left-3 z-[2] cursor-pointer'
+          onClick={handleBackClick}
+        />
+        <video
+          loop
+          autoPlay
+          className='
             max-w-full
             max-h-full
             z-[1]
           '
-        id='video-player'
-        ref={videoRef}>
-        {/*if u want add autoPlay u need set isPlaying init to true*/}
-        {/*but remember autoPlay is blocked by browser*/}
-      </video>
+          id='video-player'
+          ref={videoRef}>
+          {/*if u want add autoPlay u need set isPlaying init to true*/}
+          {/*but remember autoPlay is blocked by browser*/}
+        </video>
 
-      <FaPlay
-        className={`
+        <FaPlay
+          className={`
             absolute
             z-[3]
             text-white
@@ -93,11 +101,16 @@ export default function OneVideoPlayer() {
             opacity-[0.6]
             drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]
             ${isPlaying ? 'block' : 'hidden'}`}
-      />
-      {playingVideo && <DetailVideo content={[playingVideo?.full_name, playingVideo?.description]} />}
-      {playingVideo && (
-        <ActionButtonContainer video={playingVideo} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
-      )}
+        />
+        {playingVideo && <DetailVideo content={[playingVideo?.full_name, playingVideo?.description]} />}
+        {playingVideo && (
+          <ActionButtonContainer
+            video={playingVideo}
+            isCommentOpen={isCommentOpen}
+            setIsCommentOpen={setIsCommentOpen}
+          />
+        )}
+      </div>
       {playingVideo && (
         <CommentContainer video={playingVideo} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
       )}

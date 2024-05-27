@@ -30,12 +30,16 @@ export default function Message(props) {
   }
 
   const handleMsgClick = () => {
-    navigate(`/chat/${props.data.user.id}`);
+    if (isHidden) {
+      navigate(`/chat/${props.data.user.id}`);
+    } else {
+      props.setChooseId(props.data.user.id);
+    }
   };
   return (
     <div
       onClick={handleMsgClick}
-      className={` flex flex-none w-full h-20 items-center rounded-xl cursor-pointer ${isMobile ? 'bg-gray-100 ' : 'bg-[#333333]'} `}>
+      className={` flex flex-none w-full h-20 items-center rounded-xl cursor-pointer ${isMobile ? 'bg-gray-100 ' : 'bg-[#222222]'} `}>
       <img
         src={`${props.data.profile_pic}`}
         alt='avt-pic'

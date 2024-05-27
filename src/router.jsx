@@ -11,6 +11,7 @@ import OneVideoPlayer from './components/OneVideoPlayer.jsx';
 import UserProfile from './pages/userprofile/UserProfile.jsx';
 import Chat from './pages/chat/Chat.jsx';
 import Test from './pages/Test.jsx';
+import ChangePassWordPage from './pages/change-password/ChangePassWordPage.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path='video/:pk' element={<OneVideoPlayer />} />
       <Route path='user/:pk' element={<UserProfile />} />
       <Route path='chat/:pk' element={<Chat />} />
+      <Route path='change-password' element={<ChangePassWordPage />} />
     </Route>,
     <Route path='/login' element={<Login />} />,
     <Route path='/register' element={<Register />} />,

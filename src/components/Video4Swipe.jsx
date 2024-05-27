@@ -8,9 +8,10 @@ import ActionButtonContainer from './home/ActionButtonContainer.jsx';
 export default function Video4Swipe(props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
-  const { playingVideo, setPlayingVideo, videos, loadMore } = useContext(AppContext);
+  const { playingVideo, setPlayingVideo, videos, loadMore, isHidden } = useContext(AppContext);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [hlsReady, setHlsReady] = useState(false);
+  const [currThumbnail, setCurrThumbnail] = useState(null);
   // const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   // useEffect(() => {
@@ -30,6 +31,7 @@ export default function Video4Swipe(props) {
   useEffect(() => {
     if (videos.length === 0) return;
     if (!currentVideo) return;
+    setCurrThumbnail(currentVideo.thumbnail);
     setHlsReady(false);
     const videoSrc = currentVideo.video_path;
     if (Hls.isSupported()) {
@@ -65,15 +67,16 @@ export default function Video4Swipe(props) {
 
   return (
     <div
-      className='
-            flex
-            relative
-            w-full
-            justify-center
-            items-center
-            z-[1]
-            h-full
-        '
+      className={`
+        flex
+        relative
+        w-full
+        justify-center
+        items-center
+        z-[1]
+        h-full
+        overflow-hidden
+        ${isHidden ? '' : 'rounded-xl'}`}
       onClick={handleClick}
       id='home-container'>
       <video
@@ -82,9 +85,16 @@ export default function Video4Swipe(props) {
             max-w-full
             max-h-full
             z-[1]
+            rounded-md
           '
         id='video-player'
         ref={videoRef}></video>
+      {!isHidden && (
+        <img
+          src={currThumbnail}
+          alt='thumbnail'
+          className={`absolute object-cover top-0 left-0 z-[0] w-full h-full blur-lg opacity-[0.6]`}></img>
+      )}
 
       <FaPlay
         className={`

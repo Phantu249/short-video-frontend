@@ -1,5 +1,5 @@
 import { AppContext } from '../../App.jsx';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { instanceWToken } from '../../instance.js';
 
@@ -23,8 +23,23 @@ export default function HeaderMenu(props) {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (e.target.closest('.header-menu')) {
+        return;
+      }
+      setIsHeaderMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className='w-fit max-w-[30%] h-full flex justify-center items-center'>
+    <div className='header-menu w-fit max-w-[30%] z-[11] h-full flex justify-center items-center'>
       {isAuth ? (
         <div
           onClick={(e) => {
@@ -34,7 +49,7 @@ export default function HeaderMenu(props) {
           className='relative flex items-center justify-center gap-2'>
           <div className='text-sm font-light'>Xin Chào {first_name}</div>
           <img
-            className='w-10 h-10 object-cover rounded-full border-[1px] border-gray-200'
+            className='w-10 h-10 object-cover rounded-full border-[2px] border-[#444444]'
             src={profile.profile_pic}
             alt='avatar'
           />
@@ -49,7 +64,7 @@ export default function HeaderMenu(props) {
                 Hồ sơ
               </div>
               <div
-                onClick={() => props.setChangePW(true)}
+                onClick={() => navigate('/change-password')}
                 className=' cursor-pointer rounded-xl hover:bg-[#444444] p-1 px-3 '>
                 Đổi mật khẩu
               </div>

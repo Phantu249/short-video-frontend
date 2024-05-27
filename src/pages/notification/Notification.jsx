@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import { AppContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
 import ChatSearch from '../../components/notification/ChatSearch.jsx';
+import Chat from '../chat/Chat.jsx';
 
 export default function Notification() {
   const { isAuth } = useContext(AppContext);
@@ -13,9 +14,11 @@ export default function Notification() {
   const [datas, setDatas] = useState([]);
   const { hasNotif, setHasNotif, isHidden, isMobile } = useContext(AppContext);
   const [isChatSearchOpen, setIsChatSearchOpen] = useState(false);
+  const [chooseId, setChooseId] = useState(null);
+  const [reloadMs, setReloadMs] = useState(false);
 
   useAsync(async () => {
-    if (hasNotif) {
+    if (hasNotif || reloadMs) {
       if (!isAuth) {
         return navigate('/login');
       }
@@ -34,8 +37,9 @@ export default function Notification() {
         }
       }
       setHasNotif(false);
+      setReloadMs(false);
     }
-  }, [hasNotif]);
+  }, [hasNotif, reloadMs]);
 
   useAsync(async () => {
     if (!isAuth) {
@@ -61,8 +65,9 @@ export default function Notification() {
     <div
       className={` flex relative w-full flex-grow flex-col overflow-y-hidden justify-center z-[1] h-full 
                   ${isMobile ? 'bg-white' : 'bg-black text-white'} `}>
-      <div
-        className='
+      {isHidden && (
+        <div
+          className='
             w-full
             h-10
             flex
@@ -71,8 +76,7 @@ export default function Notification() {
             z-[10]
             flex-none
             '>
-        Tin nhắn
-        {isHidden && (
+          Tin nhắn
           <HiOutlineSearch
             className='absolute right-2 top-2 size-6 cursor-pointer'
             onClick={(e) => {
@@ -80,19 +84,15 @@ export default function Notification() {
               setIsChatSearchOpen(true);
             }}
           />
-        )}
-      </div>
+        </div>
+      )}
       <ChatSearch isChatSearchOpen={isChatSearchOpen} setIsChatSearchOpen={setIsChatSearchOpen} />
-      <div
-        className='
-            flex
-            flex-col
-            flex-grow
-            w-full
-            overflow-y-auto
-            gap-1
-      '>
-        {datas ? datas.map((data, idx) => <Message data={data} key={idx} />) : ''}
+      <div className='flex flex-grow w-full h-full overflow-hidden '>
+        <div
+          className={` flex flex-col flex-grow overflow-y-auto gap-1 ${isHidden ? ' w-full' : 'flex-none w-[350px] border-[#333333] border-r-[1px]'}`}>
+          {datas ? datas.map((data, idx) => <Message setChooseId={setChooseId} data={data} key={idx} />) : ''}
+        </div>
+        {!isHidden && <Chat setReloadMs={setReloadMs} chooseId={chooseId} />}
       </div>
     </div>
   );
