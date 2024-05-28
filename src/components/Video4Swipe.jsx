@@ -114,14 +114,6 @@ export default function Video4Swipe(props) {
           setIsCommentOpen={props.setIsCommentOpen}
         />
       )}
-
-      {/*{currentVideo && (*/}
-      {/*  <CommentContainer*/}
-      {/*    video={currentVideo}*/}
-      {/*    isCommentOpen={props.isCommentOpen}*/}
-      {/*    setIsCommentOpen={props.setIsCommentOpen}*/}
-      {/*  />*/}
-      {/*)}*/}
     </div>
   );
 }

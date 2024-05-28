@@ -1,6 +1,5 @@
 import { CiPaperplane } from 'react-icons/ci';
 import { useContext, useState } from 'react';
-import { instanceWToken } from '../../instance.js';
 import { AppContext, MessagesContext } from '../../App.jsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,29 +25,35 @@ export default function CmtInput(props) {
       return;
     }
     const data = {
-      comment_text: commentContent,
-      video_id: props.video.id,
+      message: commentContent,
     };
-    try {
-      const response = await instanceWToken.post('/comment', data);
-      if (response.status === 201) {
-        props.setComments((prev) => [
-          {
-            comment_text: commentContent,
-            fullname: 'Tôi',
-          },
-          ...prev,
-        ]);
-        setCommentContent('');
-      }
-    } catch (error) {
-      console.error(error);
-      if (error.response.status === 401) {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        navigate('/login');
-      }
-    }
+    props.sendCmt(data);
+    setCommentContent('');
+
+    // const data = {
+    //   comment_text: commentContent,
+    //   video_id: props.video.id,
+    // };
+    // try {
+    //   const response = await instanceWToken.post('/comment', data);
+    //   if (response.status === 201) {
+    //     props.setComments((prev) => [
+    //       {
+    //         comment_text: commentContent,
+    //         fullname: 'Tôi',
+    //       },
+    //       ...prev,
+    //     ]);
+    //     setCommentContent('');
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   if (error.response.status === 401) {
+    //     localStorage.removeItem('access_token');
+    //     localStorage.removeItem('refresh_token');
+    //     navigate('/login');
+    //   }
+    // }
   };
   return (
     <div
@@ -59,25 +64,9 @@ export default function CmtInput(props) {
                 justify-center
                 items-center
         '>
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className='
-                            h-full
-                            w-full
-                            flex
-                            justify-center
-                            items-center
-                            px-3
-                        '>
+      <form onSubmit={(e) => e.preventDefault()} className=' h-full  w-full flex justify-center items-center px-3 '>
         <input
-          className='
-                            w-[85%]
-                            h-[60%]
-                            rounded-3xl
-                            bg-gray-200
-                            p-3
-                            outline-0
-                        '
+          className=' w-[85%] h-[60%] rounded-3xl bg-gray-200 p-3 outline-0 '
           autoComplete='off'
           value={commentContent}
           onChange={(e) => setCommentContent(e.target.value)}

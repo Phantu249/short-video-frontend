@@ -2,19 +2,25 @@ import { Transition } from '@headlessui/react';
 import CmtInput from './CmtInput.jsx';
 import { FaXmark } from 'react-icons/fa6';
 import Comment from './Comment.jsx';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAsync } from 'react-use';
-import instance from '../../instance.js';
+import instance, { WS_URL } from '../../instance.js';
 import { AppContext } from '../../App.jsx';
+import useWebSocket from 'react-use-websocket';
 
 export default function CommentContainer(props) {
-  const { isMobile, isHidden } = useContext(AppContext);
+  const { isMobile, isHidden, isAuth } = useContext(AppContext);
   const [comments, setComments] = useState([]);
+  const [cmtWsURL, setCmtWsURL] = useState(null);
 
   useAsync(async () => {
     setComments([]);
-    if (!props.isCommentOpen) return;
+    if (!props.isCommentOpen) {
+      setCmtWsURL(null);
+      return;
+    }
     try {
+      if (isAuth) setCmtWsURL(`${WS_URL}comment/${props.video.id}?token=${localStorage.getItem('access_token')}`);
       const response = await instance.get(`/comment/${props.video.id}`);
       if (response.status === 200) {
         setComments(response.data);
@@ -24,9 +30,47 @@ export default function CommentContainer(props) {
     }
   }, [props.isCommentOpen, props.video]);
 
+  const loadMore = async () => {
+    if (comments.length < 10) return;
+    try {
+      const response = await instance.get(`/comment/${props.video.id}?total=${comments.length}`);
+      if (response.status === 200) {
+        console.log(response.data);
+        setComments((prev) => [...prev, ...response.data]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(cmtWsURL, {
+    shouldReconnect: (closeEvent) => {
+      return isAuth;
+    },
+    retryOnError: true,
+  });
+
+  useEffect(() => {
+    console.log('cmt Ws is ready:', readyState);
+  }, [readyState]);
+
+  useEffect(() => {
+    if (lastJsonMessage !== null) {
+      setComments((prev) => [lastJsonMessage, ...prev]);
+    }
+  }, [lastJsonMessage]);
+
   const handleCommentContainerClick = (e) => {
     e.stopPropagation();
   };
+
+  const handleScroll = async (e) => {
+    if (e.target.scrollTop + e.target.clientHeight >= e.target.scrollHeight) {
+      console.log('loadmore');
+      await loadMore();
+    }
+  };
+
   return (
     <Transition
       show={props.isCommentOpen}
@@ -52,6 +96,7 @@ export default function CommentContainer(props) {
         <FaXmark />
       </div>
       <div
+        onScroll={handleScroll}
         className='
                     flex
                     relative
@@ -65,7 +110,7 @@ export default function CommentContainer(props) {
           <Comment key={index} cmt={cmt.comment_text} user={cmt.fullname} />
         ))}
       </div>
-      <CmtInput video={props.video} setComments={setComments} />
+      <CmtInput sendCmt={sendJsonMessage} video={props.video} setComments={setComments} />
     </Transition>
   );
 }

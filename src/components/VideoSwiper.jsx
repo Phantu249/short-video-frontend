@@ -34,6 +34,7 @@ export default function VideoSwiper() {
     setDirection(swiper.swipeDirection);
     setPlaying(swiper.realIndex);
   };
+
   return (
     <div className='flex w-full z-[1] h-full overflow-hidden'>
       <Swiper

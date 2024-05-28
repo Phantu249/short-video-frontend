@@ -123,7 +123,7 @@ export default function Chat(props) {
 
   return (
     <div
-      className={` flex relative w-full flex-grow flex-col overflow-y-hidden  ${isMobile ? 'bg-white' : 'bg-black text-white'}  z-[1] h-full`}>
+      className={` flex relative w-full flex-grow flex-col overflow-y-hidden  ${isMobile ? 'bg-white' : ' custom-scrollbar bg-black text-white'}  z-[1] h-full`}>
       <div
         onClick={handleUserClick}
         className={`

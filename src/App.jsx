@@ -237,7 +237,7 @@ function App() {
         <Messages ref={globalMessage} className='globalMessage z-[100]' />
       </div>
       <MessagesContext.Provider value={globalMessage}>
-        <div className='relative h-dvh w-screen flex flex-col'>
+        <div className={`relative h-dvh w-screen flex flex-col`}>
           {loading && (
             <ReactLoading
               className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
