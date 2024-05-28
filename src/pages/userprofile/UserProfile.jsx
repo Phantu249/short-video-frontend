@@ -15,6 +15,7 @@ export default function UserProfile() {
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
   const navigate = useNavigate();
+  const [videos, setVideos] = useState([]);
   const { isAuth, userId, isMobile } = useContext(AppContext);
   const id = useParams().pk;
 
@@ -43,10 +44,34 @@ export default function UserProfile() {
       }
     }
   }, []);
+
+  const loadMore = async () => {
+    if (videos.length < 10) return;
+    try {
+      const res = await instance.get(
+        `videoprofile?user_id=${encodeURIComponent(id)}&type=userVideo&total_length=${videos.length}&last_id=${videos[videos.length - 1].id}`,
+      );
+      if (res.status === 200) {
+        setVideos([...videos, ...res.data]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleScroll = async (e) => {
+    if (isMobile) return;
+    if (Math.ceil(e.target.scrollTop + e.target.clientHeight) >= e.target.scrollHeight) {
+      console.log('loadmore');
+      await loadMore();
+    }
+  };
+
   return (
     <div
+      onScroll={handleScroll}
       className={`flex relative flex-grow flex-col z-[1]
-                    ${isMobile ? 'w-full overflow-y-hidden' : 'overflow-y-auto bg-black text-white'}`}>
+                    ${isMobile ? 'w-full overflow-y-hidden' : 'custom-scrollbar overflow-y-auto bg-black text-white'}`}>
       <BackButton />
       <UserBoardNotOwner
         user_id={id}
@@ -57,7 +82,7 @@ export default function UserProfile() {
         follow={follow}
         likeCount={likeCount}
       />
-      <VideoBoardNotOwner user_id={id} />
+      <VideoBoardNotOwner videos={videos} setVideos={setVideos} loadMore={loadMore} user_id={id} />
     </div>
   );
 }

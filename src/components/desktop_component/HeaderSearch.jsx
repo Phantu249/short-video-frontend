@@ -21,7 +21,7 @@ export default function HeaderSearch() {
       if (!debounce.trim()) return;
       setIsSearching(true);
       try {
-        const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=user`);
+        const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=user&limit=5`);
         if (res.status === 200) {
           console.log(res.data);
           setSearchResult(res.data);
@@ -38,27 +38,6 @@ export default function HeaderSearch() {
     if (!searchContent.trim()) return;
     setSearchResult([]);
     navigate(`/search/${encodeURIComponent(searchContent.trim())}`);
-    // setLoading(true);
-    // try {
-    //   const res = await instance(`search?q=${encodeURIComponent(searchContent)}&type=user`);
-    //   if (res.status === 200) {
-    //     console.log(res.data);
-    //     if (res.data.length > 0) {
-    //       setSearchResult(res.data);
-    //     } else {
-    //       globalMessage.current.show([
-    //         {
-    //           severity: 'error',
-    //           detail: 'Không tìm thây kết quả phù hợp',
-    //           closable: true,
-    //         },
-    //       ]);
-    //     }
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
-    // setLoading(false);
   };
 
   useEffect(() => {

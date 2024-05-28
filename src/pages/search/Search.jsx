@@ -72,7 +72,6 @@ export default function Search() {
 
   const search = async () => {
     if (!searchContent.trim()) return;
-    console.log(searchContent, !searchContent.trim());
     setLoading(true);
     try {
       const res = await instance(
@@ -98,9 +97,28 @@ export default function Search() {
     setLoading(false);
   };
 
+  const loadMore = async () => {
+    if (!searchContent.trim()) return;
+    if (searchResult.length < 10) return;
+    try {
+      const res = await instance(
+        `search?q=${encodeURIComponent(searchContent)}&type=${encodeURIComponent(searchField)}&last_id=${searchField === 'video' ? searchResult[searchResult.length - 1].id : searchResult[searchResult.length - 1].user_id}`,
+      );
+      if (res.status === 200) {
+        console.log(res.data);
+        if (res.data.length > 0) {
+          setSearchResult([...searchResult, ...res.data]);
+        } else {
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <div
-      className={` flex flex-col w-full flex-grow z-[1] h-full overflow-hidden ${isMobile ? '' : 'bg-black text-white'}`}>
+      className={` flex flex-col w-full flex-grow z-[1] h-full overflow-hidden ${isMobile ? '' : 'custom-scrollbar bg-black text-white'}`}>
       {isHidden && <SearchBox searchContent={searchContent} setSearchContent={setSearchContent} search={search} />}
       <div
         className={`flex flex-none justify-center gap-3 w-full h-7 my-1 border-b-[1px] ${isMobile ? '' : 'border-[#555555]'}`}>
@@ -121,7 +139,7 @@ export default function Search() {
           Người dùng
         </div>
       </div>
-      {searchResult.length > 0 && <SearchResult results={searchResult} field={searchField} />}
+      {searchResult.length > 0 && <SearchResult loadMore={loadMore} results={searchResult} field={searchField} />}
     </div>
   );
 }

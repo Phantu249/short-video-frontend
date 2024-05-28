@@ -12,6 +12,7 @@ export default function CommentContainer(props) {
   const [comments, setComments] = useState([]);
 
   useAsync(async () => {
+    setComments([]);
     if (!props.isCommentOpen) return;
     try {
       const response = await instance.get(`/comment/${props.video.id}`);
@@ -35,7 +36,7 @@ export default function CommentContainer(props) {
       leave='transition-transform ease-in duration-200'
       leaveFrom={`transform ${isHidden ? 'translate-y-0' : 'translate-x-0'}`}
       leaveTo={`transform ${isHidden ? 'translate-y-full' : 'translate-x-full'}`}
-      className={` flex flex-col z-[11] flex-none bg-white bottom-0 rounded-t-xl ${isHidden ? 'absolute w-full h-2/3' : 'relative w-[350px] h-full'}`}
+      className={`${isMobile ? '' : 'custom-scrollbar'} flex flex-col z-[11] flex-none bg-white bottom-0 rounded-t-xl ${isHidden ? 'absolute w-full h-2/3' : 'relative w-[350px] h-full'}`}
       onClick={handleCommentContainerClick}>
       <div className='flex justify-center m-1 p-1 z-[4]'>Comment</div>
       <div

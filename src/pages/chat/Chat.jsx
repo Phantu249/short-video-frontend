@@ -142,6 +142,9 @@ export default function Chat(props) {
         {ReceiverFirstname} {ReceiverLastName}
         {isHidden && <BackButton />}
       </div>
+      {!receiverId && (
+        <div className='flex flex-grow justify-center items-center text-gray-400'>Hãy chọn một cuộc hội thoại</div>
+      )}
       <MessageContainer
         isFetching={isFetching}
         fetchMore={fetchMore}
@@ -156,7 +159,7 @@ export default function Chat(props) {
           flex
           flex-none
           w-full
-          h-14
+          h-16
           border-t-[1px]
           ${isMobile ? '' : 'border-[#333333]'}
           `}>
@@ -174,7 +177,6 @@ export default function Chat(props) {
               w-[85%]
               h-[60%]
               rounded-3xl
-              
               p-3
               ${isMobile ? 'bg-gray-200' : 'bg-[#333333]'}
               outline-0`}

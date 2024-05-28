@@ -33,6 +33,7 @@ export default function Message(props) {
     if (isHidden) {
       navigate(`/chat/${props.data.user.id}`);
     } else {
+      props.data.is_read = true;
       props.setChooseId(props.data.user.id);
     }
   };

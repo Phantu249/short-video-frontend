@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useAsync } from 'react-use';
 import instance from '../../instance.js';
 import { FaRegUser } from 'react-icons/fa6';
@@ -6,14 +6,14 @@ import VideoList from '../profile/VideoList.jsx';
 import { AppContext } from '../../App.jsx';
 
 export default function VideoBoardNotOwner(props) {
-  const [videos, setVideos] = useState([]);
+  // const [videos, setVideos] = useState([]);
   const { isMobile } = useContext(AppContext);
 
   useAsync(async () => {
     try {
       const res = await instance.get(`videoprofile?user_id=${encodeURIComponent(props.user_id)}&type=userVideo`);
       if (res.status === 200) {
-        setVideos(res.data);
+        props.setVideos(res.data);
       }
     } catch (error) {
       console.error(error);
@@ -29,7 +29,7 @@ export default function VideoBoardNotOwner(props) {
         </div>
         {!isMobile && <div>Video</div>}
       </div>
-      <VideoList videos={videos} board={false} />
+      <VideoList loadMore={props.loadMore} videos={props.videos} board={false} />
     </div>
   );
 }

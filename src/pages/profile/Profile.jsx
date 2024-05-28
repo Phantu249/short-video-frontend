@@ -7,6 +7,7 @@ import EditProfile from '../../components/profile/EditProfile.jsx';
 import Follow from '../../components/profile/Follow.jsx';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import ChangePassword from '../../components/profile/ChangePassword.jsx';
+import instance from '../../instance.js';
 
 export default function Profile() {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -14,6 +15,8 @@ export default function Profile() {
   const navigate = useNavigate();
   const [followType, setFollowType] = useState('follower');
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [videos, setVideos] = useState([]);
+  const [board, setBoard] = useState('userVideo');
   const { isAuth, username, userId, profile, follow, likeCount, first_name, last_name, setReloadProfile, isMobile } =
     useContext(AppContext);
 
@@ -27,10 +30,33 @@ export default function Profile() {
     setReloadProfile(!isEditOpen);
   }, [isEditOpen]);
 
+  const loadMore = async () => {
+    if (videos.length < 10) return;
+    try {
+      const res = await instance.get(
+        `videoprofile?user_id=${encodeURIComponent(userId)}&type=${encodeURIComponent(board)}&total_length=${videos.length}&last_id=${videos[videos.length - 1].id}`,
+      );
+      if (res.status === 200) {
+        setVideos([...videos, ...res.data]);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleScroll = async (e) => {
+    if (isMobile) return;
+    if (Math.ceil(e.target.scrollTop + e.target.clientHeight) >= e.target.scrollHeight) {
+      console.log('loadmore');
+      await loadMore();
+    }
+  };
+
   return (
     <div
+      onScroll={handleScroll}
       className={`flex relative flex-grow flex-col z-[1] overflow-x-hidden
-                    ${isMobile ? 'w-full overflow-y-hidden' : 'overflow-y-auto bg-black text-white'}
+                    ${isMobile ? 'w-full overflow-y-hidden' : 'custom-scrollbar overflow-y-auto bg-black text-white'}
                     ${isEditOpen || isFollowOpen || isChangePasswordOpen ? 'overflow-y-hidden' : ''}`}>
       <UserBoard
         username={username}
@@ -45,7 +71,16 @@ export default function Profile() {
         setIsFollowOpen={setIsFollowOpen}
         setIsChangePasswordOpen={setIsChangePasswordOpen}
       />
-      {userId && <VideoBoard user_id={userId} />}
+      {userId && (
+        <VideoBoard
+          loadMore={loadMore}
+          videos={videos}
+          setVideos={setVideos}
+          board={board}
+          setBoard={setBoard}
+          user_id={userId}
+        />
+      )}
       <EditProfile
         username={username}
         first_name={first_name}

@@ -53,7 +53,8 @@ export default function Video(props) {
   };
 
   return (
-    <div className={` relative w-1/3 h-1/2 min-h-52 max-h-96 p-[1px] lg:w-1/4 lg:p-[2px] xl:w-1/5 xl:p-[2px]`}>
+    <div
+      className={` relative w-1/3 h-1/2 min-h-52 max-h-96 p-[1px] sm:w-1/3 sm:h-[16rem] lg:w-1/4 lg:h-[18rem] lg:p-[2px] xl:w-1/5 xl:h-[20rem] xl:p-[2px]`}>
       {props.board === 'userVideo' && (
         <TiDelete
           onClick={showConfirm}

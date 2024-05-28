@@ -10,6 +10,7 @@ export default function ChangePassWordPage(props) {
   const [reNewPassword, setReNewPassword] = useState('');
   const globalMessage = useContext(MessagesContext);
   const { isMobile, isHidden } = useContext(AppContext);
+  const oldpass = useRef(null);
   const pas1 = useRef(null);
   const pas2 = useRef(null);
 
@@ -122,12 +123,14 @@ export default function ChangePassWordPage(props) {
                 Mật khẩu cũ
               </label>
               <input
-                type='text'
+                type='password'
                 name='firstname'
                 id='firstname'
+                ref={oldpass}
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 autoComplete='off'
+                required={true}
                 className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
                   ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
@@ -144,6 +147,7 @@ export default function ChangePassWordPage(props) {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete='off'
+                required={true}
                 className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
                   ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
@@ -160,6 +164,7 @@ export default function ChangePassWordPage(props) {
                 value={reNewPassword}
                 onChange={(e) => setReNewPassword(e.target.value)}
                 autoComplete='off'
+                required={true}
                 className={`outline-none border-b-2 border-[rgba(209,213,219,0.2)] focus:border-[rgba(149,153,156,0.8)] h-8 w-full text-right mx-2
                   ${isMobile ? 'text-black' : 'bg-black text-white'}`}
               />
@@ -169,6 +174,7 @@ export default function ChangePassWordPage(props) {
                 type='checkbox'
                 id='show-password'
                 onChange={(e) => {
+                  oldpass.current.type = e.target.checked ? 'text' : 'password';
                   pas1.current.type = e.target.checked ? 'text' : 'password';
                   pas2.current.type = e.target.checked ? 'text' : 'password';
                 }}

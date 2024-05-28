@@ -46,7 +46,7 @@ export default function VideoSwiper() {
         {arr.length > 0
           ? arr.map((video, idx) => {
               return (
-                <SwiperSlide key={idx} className={`h-full ${isHidden ? '' : 'p-5'}`}>
+                <SwiperSlide key={idx} className={`h-full ${isHidden ? '' : 'p-3'}`}>
                   <Video4Swipe
                     isCommentOpen={isCommentOpen}
                     setIsCommentOpen={setIsCommentOpen}

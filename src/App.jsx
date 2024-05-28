@@ -203,6 +203,7 @@ function App() {
   return (
     <AppContext.Provider
       value={{
+        loading,
         isMobile,
         isHidden,
         isAuth,

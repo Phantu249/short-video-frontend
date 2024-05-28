@@ -120,7 +120,7 @@ export default function UserBoard(props) {
               className=' w-28 h-28 object-cover rounded-full border-4 border-[#444444] my-2'
             />
             <div className='flex flex-col justify-center gap-1'>
-              <div className='font-semibold w-full text-center text-3xl h-[32px]'>
+              <div className='font-semibold w-full text-3xl h-[32px]'>
                 {props.first_name} {props.last_name}
               </div>
               <div className='pl-1 text-sm mb-2'>@{props.username}</div>

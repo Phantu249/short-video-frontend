@@ -21,6 +21,7 @@ const Home = () => {
             z-[1]
             h-full'>
       <Header />
+      {videos?.length === 0 && <div className='text-center text-gray-400 w-full p-[5rem]'>No videos found</div>}
       {videos?.length > 0 && <VideoSwiper />}
     </div>
   );

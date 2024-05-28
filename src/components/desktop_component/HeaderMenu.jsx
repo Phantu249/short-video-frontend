@@ -49,7 +49,7 @@ export default function HeaderMenu(props) {
           className='relative flex items-center justify-center gap-2'>
           <div className='text-sm font-light'>Xin Chào {first_name}</div>
           <img
-            className='w-10 h-10 object-cover rounded-full border-[2px] border-[#444444]'
+            className='w-10 h-10 object-cover rounded-full border-[2px] border-[#444444] cursor-pointer'
             src={profile.profile_pic}
             alt='avatar'
           />

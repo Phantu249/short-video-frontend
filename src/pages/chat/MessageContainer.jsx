@@ -7,16 +7,16 @@ export default function MessageContainer(props) {
 
   useEffect(() => {
     if (scrollHeight !== 0) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight - scrollHeight;
+      chatBoxRef.current.scrollTop = chatBoxRef.current?.scrollHeight - scrollHeight;
       setScrollHeight(0);
-    } else chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    } else chatBoxRef.current.scrollTop = chatBoxRef.current?.scrollHeight;
   }, [props.messages]);
 
   return (
     <div
       onScroll={(e) => {
         if (e.target.scrollTop === 0) {
-          setScrollHeight(chatBoxRef.current.scrollHeight);
+          setScrollHeight(chatBoxRef.current?.scrollHeight);
           props.fetchMore();
         }
       }}

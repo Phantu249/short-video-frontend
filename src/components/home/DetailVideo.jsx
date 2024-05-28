@@ -1,6 +1,8 @@
 export default function DetailVideo(props) {
-    return (
-        <div className="
+  return (
+    <div
+      className='
+            custom-scrollbar
             absolute
             text-white
             bottom-0
@@ -13,21 +15,25 @@ export default function DetailVideo(props) {
             flex
             flex-col
             justify-end
-            ">
-            <p className="
+            '>
+      <p
+        className='
                 w-full
                 font-bold
                 text-lg
-                drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]"
-            >{props.content[0]}</p>
-            <p className="
+                drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]'>
+        {props.content[0]}
+      </p>
+      <p
+        className='
                 w-full
                 max-h-26
                 text-base
                 overflow-y-auto
-                drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]"
-            >{props.content[1]}
-            </p>
-        </div>
-    )
+                overflow-x-hidden
+                drop-shadow-[0_0_2px_rgba(0,0,0,0.6)]'>
+        {props.content[1]}
+      </p>
+    </div>
+  );
 }
