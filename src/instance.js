@@ -3,7 +3,7 @@ import axios from 'axios';
 const BASE_URL = 'http://127.0.0.1:8000/api';
 const LOCAL_URL = 'http://192.168.0.100:8000/api';
 const ZROK_URL = 'https://kcznj4y38eax.share.zrok.io/api';
-const URL = LOCAL_URL;
+const URL = 'https://short-video-backend-piaz.onrender.com/api';
 export const WS_URL = (URL.split('/')[0] === 'http:' ? 'ws://' : 'wss://') + URL.split('/')[2] + '/ws/';
 
 const instance = axios.create({

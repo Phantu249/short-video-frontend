@@ -30,13 +30,16 @@ export default function Test() {
           </SwiperSlide>
         </Swiper>
       </div>
-      <div className='w-[200px] h-[300px] bg-gray-300 overflow-hidden'>
+      <div className='w-[200px] h-[300px] bg-gray-300 '>
         <Swiper onSlideChange={handleSlideChange} className='h-full w-full' direction={'vertical'} loop={true}>
           <SwiperSlide className='h-full w-full'>
             <Video isPlay={playingVideo === 0} id={{ pk: 2 }} />
           </SwiperSlide>
           <SwiperSlide>
             <Video isPlay={playingVideo === 1} id={{ pk: 4 }} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <Video isPlay={playingVideo === 2} id={{ pk: 16 }} />
           </SwiperSlide>
         </Swiper>
       </div>
