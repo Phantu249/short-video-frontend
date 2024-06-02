@@ -9,7 +9,6 @@ export const WS_URL = (URL.split('/')[0] === 'http:' ? 'ws://' : 'wss://') + URL
 const instance = axios.create({
   baseURL: URL,
   headers: {
-    'ngrok-skip-browser-warning': 'true',
     'Access-Control-Allow-Origin': '*',
   },
 });
@@ -17,7 +16,6 @@ const instance = axios.create({
 export const instanceWToken = axios.create({
   baseURL: URL,
   headers: {
-    'ngrok-skip-browser-warning': 'true',
     'Access-Control-Allow-Origin': '*',
   },
 });
