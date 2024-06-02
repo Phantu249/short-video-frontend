@@ -96,9 +96,6 @@ function App() {
       return isAuth;
     },
     retryOnError: true,
-    headers: {
-      Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-    },
   });
 
   useEffect(() => {
