@@ -81,7 +81,7 @@ export default function Video4Swipe(props) {
       id='home-container'>
       <video
         loop
-        autoPlay
+        autoPlay={props.isPlay}
         src={currentVideo && currentVideo.video_path}
         className='
             max-w-full
