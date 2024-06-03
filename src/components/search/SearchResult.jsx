@@ -19,9 +19,8 @@ export default function SearchResult(props) {
       ref={searchResultRef}
       onScroll={handleScroll}
       className={`
-       
+    
         flex
-        h-full
         ${isMobile ? 'bg-white text-back flex-wrap' : props.field === 'user' ? 'bg-black text-white flex-col items-center gap-1' : 'bg-black text-white flex-wrap'}
         w-full
         overflow-y-auto
