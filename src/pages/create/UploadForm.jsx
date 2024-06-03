@@ -34,6 +34,14 @@ export default function UploadForm(props) {
         navigate('/home');
       }
     } catch (err) {
+      setLoading(false);
+      globalMessage.current.show([
+        {
+          severity: 'error',
+          detail: 'Upload failed',
+          closable: true,
+        },
+      ]);
       console.log(err);
       if (err.response.status === 401) {
         localStorage.removeItem('access_token');
