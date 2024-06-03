@@ -6,7 +6,6 @@ import { useRef, useState } from 'react';
 import { useAsync } from 'react-use';
 import instance from '../instance.js';
 import { IoIosArrowBack } from 'react-icons/io';
-import Hls from 'hls.js';
 import { useParams } from 'react-router-dom';
 
 export default function OneVideoPlayer() {
@@ -23,12 +22,12 @@ export default function OneVideoPlayer() {
       const response = await instance.get(`video/${pk}`);
       if (response.status === 200) {
         setPlayingVideo(response.data);
-        const videoSrc = response.data.video_path;
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(videoSrc);
-          hls.attachMedia(videoRef.current);
-        }
+        // const videoSrc = response.data.video_path;
+        // if (Hls.isSupported()) {
+        //   const hls = new Hls();
+        //   hls.loadSource(videoSrc);
+        //   hls.attachMedia(videoRef.current);
+        // }
       }
     } catch (error) {
       console.log(error);
@@ -81,6 +80,7 @@ export default function OneVideoPlayer() {
         <video
           loop
           autoPlay
+          src={playingVideo && playingVideo.video_path}
           className='
             max-w-full
             max-h-full

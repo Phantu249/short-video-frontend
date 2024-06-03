@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '../App.jsx';
-import Hls from 'hls.js';
 import { FaPlay } from 'react-icons/fa6';
 import DetailVideo from './home/DetailVideo.jsx';
 import ActionButtonContainer from './home/ActionButtonContainer.jsx';
@@ -32,16 +31,17 @@ export default function Video4Swipe(props) {
     if (videos.length === 0) return;
     if (!currentVideo) return;
     setCurrThumbnail(currentVideo.thumbnail);
-    setHlsReady(false);
-    const videoSrc = currentVideo.video_path;
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(videoRef.current);
-    } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-      videoRef.current.src = videoSrc;
-    }
-    setHlsReady(true);
+    // setHlsReady(false);
+    // const videoSrc = currentVideo.video_path;
+    // if (Hls.isSupported()) {
+    //   const hls = new Hls();
+    //   hls.loadSource(videoSrc);
+    //   hls.attachMedia(videoRef.current);
+    // } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+    //   videoRef.current.src = videoSrc;
+    // }
+    // setHlsReady(true);
+
     // setIsPlaying(!videoRef.current.paused);
   }, [currentVideo, props.idx]);
 
@@ -56,7 +56,7 @@ export default function Video4Swipe(props) {
   };
 
   useEffect(() => {
-    if (!hlsReady) return;
+    // if (!hlsReady) return;
     setIsPlaying(!props.isPlay);
     if (props.isPlay) {
       videoRef.current.play();
@@ -81,6 +81,7 @@ export default function Video4Swipe(props) {
       id='home-container'>
       <video
         loop
+        src={currentVideo && currentVideo.video_path}
         className='
             max-w-full
             max-h-full
