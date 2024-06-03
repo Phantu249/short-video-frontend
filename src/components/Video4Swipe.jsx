@@ -42,7 +42,7 @@ export default function Video4Swipe(props) {
     // }
     // setHlsReady(true);
 
-    // setIsPlaying(!videoRef.current.paused);
+    setIsPlaying(!videoRef.current.paused);
   }, [currentVideo, props.idx]);
 
   const handleClick = (e) => {
