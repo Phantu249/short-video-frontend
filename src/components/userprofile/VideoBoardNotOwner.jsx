@@ -18,7 +18,7 @@ export default function VideoBoardNotOwner(props) {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [props.user_id]);
 
   return (
     <div className={` flex flex-col flex-grow w-full h-full ${isMobile ? 'overflow-y-hidden' : ''}`}>

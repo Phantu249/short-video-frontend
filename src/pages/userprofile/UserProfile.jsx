@@ -26,6 +26,8 @@ export default function UserProfile() {
   }, []);
 
   useAsync(async () => {
+    setVideos([]);
+    setProfile({});
     try {
       const res = await instance.get(`user/${id}`);
       if (res.status === 200) {
