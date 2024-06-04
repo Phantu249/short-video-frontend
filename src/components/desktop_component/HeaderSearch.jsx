@@ -64,7 +64,7 @@ export default function HeaderSearch() {
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`header-search-box z-[11] relative flex flex-col w-[40%] max-w-[600px] h-full`}>
+      className={`header-search-box z-[20] relative flex flex-col w-[40%] max-w-[600px] h-full`}>
       <SearchBox isHeader={true} searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
       {searchResult.length > 0 && <HeaderSearchResult results={searchResult} />}
     </div>
