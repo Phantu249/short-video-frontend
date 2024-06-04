@@ -43,7 +43,7 @@ export default function UserProfile() {
         return navigate('/login');
       }
     }
-  }, []);
+  }, [id]);
 
   const loadMore = async () => {
     if (videos.length < 10) return;
