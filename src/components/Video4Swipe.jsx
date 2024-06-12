@@ -12,11 +12,6 @@ export default function Video4Swipe(props) {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [hlsReady, setHlsReady] = useState(false);
   const [currThumbnail, setCurrThumbnail] = useState(null);
-  // const [isCommentOpen, setIsCommentOpen] = useState(false);
-
-  // useEffect(() => {
-  //   props.setIsCommentOpen(isCommentOpen);
-  // }, [isCommentOpen]);
 
   useEffect(() => {
     if (props.isPlay) {
