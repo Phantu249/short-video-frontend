@@ -81,6 +81,7 @@ export default function Video4Swipe(props) {
       id='home-container'>
       <video
         loop
+        playsInline={true}
         autoPlay={props.isPlay}
         src={currentVideo && currentVideo.video_path}
         className='

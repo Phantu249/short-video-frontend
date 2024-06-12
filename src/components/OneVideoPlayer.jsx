@@ -80,6 +80,7 @@ export default function OneVideoPlayer() {
         <video
           loop
           autoPlay
+          playsInline={true}
           src={playingVideo && playingVideo.video_path}
           className='
             max-w-full
