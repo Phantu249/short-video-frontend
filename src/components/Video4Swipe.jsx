@@ -81,6 +81,7 @@ export default function Video4Swipe(props) {
       id='home-container'>
       <video
         loop
+        playsInline={true}
         className='
             max-w-full
             max-h-full

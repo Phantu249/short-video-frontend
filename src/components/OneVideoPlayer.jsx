@@ -81,6 +81,7 @@ export default function OneVideoPlayer() {
         <video
           loop
           autoPlay
+          playsInline={true}
           className='
             max-w-full
             max-h-full
