@@ -17,13 +17,13 @@ export default function HeaderSearch() {
   const debounce = useDebounce(searchContent, 500);
 
   useAsync(async () => {
+    setShowResult(true);
     if (debounce) {
       if (!debounce.trim()) return;
       setIsSearching(true);
       try {
         const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=user&limit=5`);
         if (res.status === 200) {
-          setShowResult(true);
           setSearchResult(res.data);
           setIsSearching(false);
         }
