@@ -37,6 +37,7 @@ export default function HeaderSearch() {
 
   const search = async () => {
     if (!searchContent.trim()) return;
+    setShowResult(false);
     setSearchResult([]);
     navigate(`/search/${encodeURIComponent(searchContent.trim())}`);
   };
