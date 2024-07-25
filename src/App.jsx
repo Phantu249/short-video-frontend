@@ -31,6 +31,7 @@ function App() {
   const [homeState, setHomeState] = useState('forYou');
   const [playingVideo, setPlayingVideo] = useState(0);
   const [reloadHome, setReloadHome] = useState(true);
+  const [showResult, setShowResult] = useState(false);
 
   const [username, setUsername] = useState('');
   const [profile, setProfile] = useState({});
@@ -232,6 +233,8 @@ function App() {
         first_name,
         last_name,
         setReloadProfile,
+        showResult,
+        setShowResult,
       }}>
       <div className='flex justify-center items-center'>
         <Messages ref={globalMessage} className='globalMessage z-[100]' />
