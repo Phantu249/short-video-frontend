@@ -18,13 +18,12 @@ export default function HeaderSearch() {
 
   useAsync(async () => {
     if (debounce) {
-      setShowResult(true);
       if (!debounce.trim()) return;
       setIsSearching(true);
       try {
         const res = await instance(`search?q=${encodeURIComponent(debounce)}&type=user&limit=5`);
         if (res.status === 200) {
-          console.log(res.data);
+          setShowResult(true);
           setSearchResult(res.data);
           setIsSearching(false);
         }
