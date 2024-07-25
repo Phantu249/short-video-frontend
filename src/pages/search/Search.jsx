@@ -13,11 +13,12 @@ export default function Search() {
   const [searchContent, setSearchContent] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
-  const { setLoading, setIsSearching, isMobile, isHidden } = useContext(AppContext);
+  const { setLoading, setIsSearching, isMobile, isHidden, setShowResult } = useContext(AppContext);
 
   const debounce = useDebounce(searchContent, 500);
 
   useEffect(() => {
+    setShowResult(false);
     setSearchResult([]);
     if (content && !!content.trim()) setSearchContent(content);
   }, [content]);
