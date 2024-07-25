@@ -62,6 +62,7 @@ export default function HeaderSearch() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  console.log("show result: ", showResult);
 
   return (
     <div
