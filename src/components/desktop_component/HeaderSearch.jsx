@@ -11,13 +11,14 @@ export default function HeaderSearch() {
   const [searchContent, setSearchContent] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const globalMessage = useContext(MessagesContext);
-  const { setLoading, setIsSearching } = useContext(AppContext);
+  const { setLoading, setIsSearching, showResult, setShowResult } = useContext(AppContext);
   const navigate = useNavigate();
 
   const debounce = useDebounce(searchContent, 500);
 
   useAsync(async () => {
     if (debounce) {
+      setShowResult(true);
       if (!debounce.trim()) return;
       setIsSearching(true);
       try {
@@ -66,7 +67,7 @@ export default function HeaderSearch() {
       onClick={(e) => e.stopPropagation()}
       className={`header-search-box z-[20] relative flex flex-col w-[40%] max-w-[600px] h-full`}>
       <SearchBox isHeader={true} searchContent={searchContent} setSearchContent={setSearchContent} search={search} />
-      {searchResult.length > 0 && <HeaderSearchResult results={searchResult} />}
+      {showResult && searchResult.length > 0 && <HeaderSearchResult results={searchResult} />}
     </div>
   );
 }
